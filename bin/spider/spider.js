@@ -119,7 +119,7 @@ function getArticlesByOpenid(openid, callback){
 
                     }
                     else {
-                        console.error("爬取文章有误！");  // 访问太多次需要验证码
+                        console.error("爬取文章有误！");  // 访问太多次需要验证码，待处理
                     }
 
                     //console.log(articles);
