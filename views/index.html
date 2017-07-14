@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="generator" content="MetInfo 5.3.16"
           data-variable="http://show.metinfo.cn/muban/M1601005/364/,en,10001,,10001,M1601005">
-    <link href="../public/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-    <link rel="stylesheet" href="../public/stylesheets/index.css">
-    <link href="../public/stylesheets/video-js.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link href="/stylesheets/video-js.css" type="text/css" rel="stylesheet">
 
     <!--[if lt IE 10]>
-    <script src="../public/javascripts/media.match.min.js"></script>
-    <script src="../public/javascripts/respond.min.js"></script>
-    <script src="../public/javascripts/classList.min.js"></script>
+    <script src="/javascripts/media.match.min.js"></script>
+    <script src="/javascripts/respond.min.js"></script>
+    <script src="/javascripts/classList.min.js"></script>
     <![endif]-->
 
 </head>
-<body>
+<body ng-app="index" ng-controller="mainCtrl">
 <!--[if lte IE 8]>
 <div class="text-center padding-top-50 padding-bottom-50 bg-blue-grey-100">
     <p class="browserupgrade font-size-18">你正在使用一个<strong>过时</strong>的浏览器。请升级您的浏览器，以提高您的体验。</p>
@@ -35,7 +35,7 @@
         <li class="search clearfix">
             <span class="prev w080"><a href="index.html" title="Home">主页</a></span>
             <div id="met_mob_nav_close">
-                <img class="hover" alt="Menu" src="../public/images/mobile_menu_closes.png" id="need_help_mobile">
+                <img class="hover" alt="Menu" src="/images/mobile_menu_closes.png" id="need_help_mobile">
             </div>
         </li>
 
@@ -84,7 +84,7 @@
                 <nav class="clearfix">
                     <div id="met_logo">
                         <a href="index.html" title="微信公众号">
-                            <img src="../public/images/logo.jpg" alt="微信公众号">
+                            <img src="/images/logo.jpg" alt="微信公众号">
                         </a>
                     </div>
                     <ul class="nav_ul met_masthead_cata hidden-sm hidden-xs">
@@ -172,12 +172,12 @@
 
                 <div class="item">
 
-                    <a href="http://10.10.10.187/M1601005" title="" target="_self">
+                    <a href="" title="" target="_self">
 
                         <picture>
-                            <source srcset="../public/images/pic1.jpg" media="(min-width: 768px)">
+                            <source srcset="http://file06.16sucai.com/2016/0328/1d6f8c4736a272a15b6c5c77be3e94ce.jpg" media="(min-width: 768px)">
                             <img class="cover-image overlay-scale"
-                                 srcset="../public/images/pic1.jpg" alt="">
+                                 srcset="http://file06.16sucai.com/2016/0328/1d6f8c4736a272a15b6c5c77be3e94ce.jpg" alt="">
                         </picture>
                         <div class="carousel-caption p-2">
                             <h3 class="animation-slide-top animation-delay-300" style="color:"></h3>
@@ -191,9 +191,23 @@
                 <div class="item active">
 
                     <picture>
-                        <source srcset="../public/images/pic2.jpg" media="(min-width: 768px)">
+                        <source srcset="http://pic.qiantucdn.com/58pic/22/17/68/57b5798a1c43f_1024.jpg" media="(min-width: 768px)">
                         <img class="cover-image overlay-scale"
-                             srcset="../public/images/pic2.jpg" alt="">
+                             srcset="http://pic.qiantucdn.com/58pic/22/17/68/57b5798a1c43f_1024.jpg" alt="">
+                    </picture>
+                    <div class="carousel-caption p-">
+                        <h3 class="animation-slide-top animation-delay-300" style="color:"></h3>
+                        <p class="animation-slide-bottom animation-delay-600" style="color:"></p>
+                    </div>
+
+                </div>
+
+                <div class="item">
+
+                    <picture>
+                        <source srcset="http://img.tupianzj.com/uploads/allimg/160623/9-160623094201.jpg" media="(min-width: 768px)">
+                        <img class="cover-image overlay-scale"
+                             srcset="http://img.tupianzj.com/uploads/allimg/160623/9-160623094201.jpg" alt="">
                     </picture>
                     <div class="carousel-caption p-">
                         <h3 class="animation-slide-top animation-delay-300" style="color:"></h3>
@@ -219,109 +233,30 @@
     </div>
 
 
-    <div id="met_card_list" class="lg-container met-index-product">
+    <div id="met_card_list" class="lg-container met-index-product" hidden >
 
-        <div class="row">
-
-            <div class="col-sm-6">
-                <div class="met_multi_img animate-item animate-start">
-                    <div class="met_img">
-                        <a href="" title="KIDS&amp;LOOK" target="_self">
-                            <img src="http://mmbiz.qpic.cn/mmbiz_jpg/OzWrbDiaQRafVdhFJ6Mnxnib0TTJwGfREabPSUKrVh4ZeHGadJT0t6IN5ULxicnjBnMgHHzYmTFqHXWCL7iarpms1g/0?wx_fmt=jpeg" alt="KIDS&amp;LOOK">
-                        </a>
-                    </div>
-
-                    <div class="met_img_subinfo">
-                        <a href="" title="KIDS&amp;LOOK" target="_self">
-                            <div class="met_img_wrap">
-                                <h3>原创 你不健身有一百种理由，呵呵</h3>
-                                <p>真相了</p>
-                                <p>2017年7月12日</p>
-                            </div>
-                        </a>
-                    </div>
-
+        <div class="col-sm-6" ng-repeat="article in articles">
+            <div class="met_multi_img animate-item animate-start">
+                <div class="met_img">
+                    <a href="{{article.url}}"
+                       title="{{article.title}}" target="_self">
+                        <img data-original="{{article.pic}}"
+                             alt="{{article.title}}" class="img-responsive" src="{{article.pic}}" style="display: block;">
+                    </a>
                 </div>
-            </div>
 
-            <div class="col-sm-6">
-
-                    <div class="col-sm-12">
-                        <div class="met_multi_img animate-item animate-start animate-delay-1">
-                            <div class="met_img">
-                                <a href="" title="我的天使" target="_self">
-                                    <img src="http://mmbiz.qpic.cn/mmbiz/EfZ5MjZ7Z21sq5NmUFib2BHRpERvYPJy8kse993qqdiaDJmHXqIHIaFrlqmjFUT4C4ZwqoIZiae1NQ926kF3SM7AQ/640?wx_fmt=jpeg" alt="我的天使">
-                                </a>
-                            </div>
-
-                            <div class="met_img_subinfo">
-                                <a href="http://show.metinfo.cn/muban/M1601005/364/news/" title="我的天使" target="_self">
-                                    <div class="met_img_wrap">
-                                        <h3>她是男神收割机，滚过的床单比你洗过的还要多！</h3>
-                                        <p>超美</p>
-                                        <p>2017年7月12日</p>
-                                    </div>
-                                </a>
-                            </div>
-
+                <div class="met_img_subinfo">
+                    <a href="{{article.url}}"
+                       title="{{article.title}}" target="_self">
+                        <div class="met_img_wrap">
+                            <h3>{{article.title}}</h3>
+                            <!--<p>{{article.subtitle}}</p> -->
+                            <p>{{article.openid}}&nbsp;&nbsp;{{ article.datetime | date:'yyyy' }}年{{ article.datetime | date:'M' }}月{{ article.datetime | date:'dd' }}日</p>
                         </div>
-                    </div>
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-
-            <div class="col-sm-6">
-                <div class="met_multi_img animate-item animate-start">
-                    <div class="met_img">
-                        <a href="http://show.metinfo.cn/muban/M1601005/364/product/showproduct.php?lang=en&amp;id=55#ad-image-0"
-                           title="KIDS简而不减" target="_self">
-                            <img data-original="http://mmbiz.qpic.cn/mmbiz_jpg/VVE9HEeM15VdBq8gFibD4xswgsVfXMXDeZUaG2NF3hqiclGicqI5WYdHUCmjyodbzSx917gFvgWSsdAIBIesqRXuA/640?wx_fmt=jpeg"
-                                 alt="KIDS简而不减" class="img-responsive" src="http://mmbiz.qpic.cn/mmbiz_jpg/VVE9HEeM15VdBq8gFibD4xswgsVfXMXDeZUaG2NF3hqiclGicqI5WYdHUCmjyodbzSx917gFvgWSsdAIBIesqRXuA/640?wx_fmt=jpeg" style="display: block;">
-                        </a>
-                    </div>
-
-                    <div class="met_img_subinfo">
-                        <a href="http://show.metinfo.cn/muban/M1601005/364/product/showproduct.php?lang=en&amp;id=55#ad-image-0"
-                           title="KIDS简而不减" target="_self">
-                            <div class="met_img_wrap">
-                                <h3>能量爆棚还能减脂？这玩意太神奇！</h3>
-                                <p>氮泵到底是什么？</p>
-                                <p>2017年7月7日</p>
-                            </div>
-                        </a>
-                    </div>
-
+                    </a>
                 </div>
+
             </div>
-
-            <div class="col-sm-6">
-                <div class="met_multi_img animate-item animate-start animate-delay-1">
-                    <div class="met_img">
-                        <a href="http://show.metinfo.cn/muban/M1601005/364/product/showproduct.php?lang=en&amp;id=57#ad-image-0"
-                           title="妈咪摄影" target="_self">
-                            <img data-original="http://mmbiz.qpic.cn/mmbiz_jpg/EfZ5MjZ7Z202ZgcsBZdqGv2IJMcwb5EWMyUTcRX1z8NBp25vTf3Ra01MQRibRXy2bAjf2cjqELx5WKh1FnofG0Q/0?wx_fmt=jpeg"
-                                 alt="妈咪摄影" class="img-responsive" src="http://mmbiz.qpic.cn/mmbiz_jpg/EfZ5MjZ7Z202ZgcsBZdqGv2IJMcwb5EWMyUTcRX1z8NBp25vTf3Ra01MQRibRXy2bAjf2cjqELx5WKh1FnofG0Q/0?wx_fmt=jpeg" style="display: block;">
-                        </a>
-                    </div>
-
-                    <div class="met_img_subinfo">
-                        <a href="http://show.metinfo.cn/muban/M1601005/364/product/showproduct.php?lang=en&amp;id=57#ad-image-0"
-                           title="妈咪摄影" target="_self">
-                            <div class="met_img_wrap">
-                                <h3>原创 蜂腰翘臀颜值逆天，这才是健身女神的正确打开方式！</h3>
-                                <p>美爆了</p>
-                                <p>2017年7月6日</p>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
     </div>
@@ -338,6 +273,8 @@
                         <p>微信公众号浏览器</p>
                         <div class="powered_by_metinfo">Powered&nbsp;by&nbsp;tao975
                         </div>
+                        <div class="powered_by_metinfo">页面取自MetInfo，如有侵权请联系删除
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-7">
@@ -350,8 +287,11 @@
         class="icon wb-chevron-up" aria-hidden="true"></i></button>
 
 
-<script src="../public/javascripts/index.js"></script>
-
+<script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
+<script src="/javascripts/metinfo.js"></script>
+<script src="/javascripts/util.js"></script>
+<script src="/plugin/angularjs/angular.min.js"></script>
+<script src="/javascripts/index/app.js"></script>
+<script src="/javascripts/index/controllers.js"></script>
 </body>
-<script src="../public/javascripts/video.js" type="text/javascript"></script>
 </html>
