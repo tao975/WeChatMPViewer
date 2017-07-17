@@ -1,5 +1,8 @@
 var express = require('express');
+var https = require('https');
 var articledb = require('../bin/db/articledb');
+var pmdb = require('../bin/db/pmdb');
+var spider = require('../bin/spider/spider');
 var router = express.Router();
 
 
@@ -11,11 +14,45 @@ router.get('/', function(req, res, next) {
 });
 
 /**
- * 获取文章
+ *  获取文章
  */
-router.get('/index/articles', function(req, res, next) {
-    articledb.getArticles(function(articles){
+router.get('/index/searchArticles', function(req, res, next) {
+    var key = req.query.key;
+    articledb.getArticlesByKey(key, function(articles){
       res.json(articles);
+    })
+});
+
+/**
+ *  查询公众号
+ */
+router.get('/index/searchPM', function(req, res, next) {
+    var key = req.query.key;
+    spider.searchPMsByKey(key,function (pms) {
+        res.json(pms);
+    });
+});
+
+/**
+ *  查询公众号
+ */
+router.post('/index/addPM', function(req, res, next) {
+    var pm = {
+        openid : req.query.openid, // 公众号
+        name : req.query.name, // 公众号名称
+        img : req.query.img, // 头像
+        desc : req.query.desc, // 介绍
+        auth : req.query.auth, // 微信认证
+        url : req.query.url // 链接
+    };
+    pmdb.savePM(pm, function(result){
+        if(result.result.ok == 1) {
+            res.send("success");
+        }
+        else {
+            res.send("error");
+        }
+
     })
 });
 

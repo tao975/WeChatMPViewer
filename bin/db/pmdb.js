@@ -65,3 +65,13 @@ exports.getPMByOpenid = function(openid,callback) {
         }
     });
 }
+
+/**
+ * 保存用户关注的公众号
+ * @param user
+ * @param pm
+ * @param callback
+ */
+exports.saveUserPM = function(user,pm,callback){
+
+}

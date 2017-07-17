@@ -106,3 +106,43 @@ exports.getArticles = function(callback) {
         }
     });
 }
+
+/**
+ * 关键字搜索文章
+ * @param callback
+ */
+exports.getArticlesByKey = function(key, callback) {
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 article
+            var collection = db.collection('article');
+
+            // 条件语句
+            var whereStr = {}
+
+            if(key != null && key != '') {
+                //key = '/' + key + '/';
+                whereStr = { $or: [
+                    {title: {$regex:key}},
+                    {openid:{$regex:key}},
+                    {auth:{$regex:key}}
+                ]};
+            }
+
+            // 查询数据
+            collection.find(whereStr).toArray(function(err, result) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                if(callback){
+                    callback(result);
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}

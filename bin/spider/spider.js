@@ -15,10 +15,9 @@ var app = express();
 /**
  *  关键字查询公众号
  */
-function searchPMsByKey(key,callback){
+exports.searchPMsByKey = function(key,callback){
 
-    var searchUrl = "http://weixin.sogou.com/weixin?type=1&query="+key; // 查询公众号url
-
+    var searchUrl = "http://weixin.sogou.com/weixin?type=1&query="+encodeURI(key); // 查询公众号url
     //  查询公众号
     http.get(searchUrl,function(req,res){
         var html=''; // 保存爬回来的页面
@@ -26,7 +25,6 @@ function searchPMsByKey(key,callback){
             html+=data;
         });
         req.on('end',function(){
-
             // 使用cheerio解析html
             var $ = cheerio.load(html);
             var pms = []; // 保存爬取到的公众号
@@ -39,10 +37,8 @@ function searchPMsByKey(key,callback){
                     auth : $(this).next().next() == undefined ? '' : $(this).next().next().children("dd").text(), // 微信认证
                     url : $(this).find(".tit").children('a').attr("href") // 链接
                 }
-
                 pms.push(pm);
             });
-
             if(callback) {
                 callback(pms);
             }
@@ -53,8 +49,8 @@ function searchPMsByKey(key,callback){
 /**
  *  按公众号ID查询公众号
  */
-function getPMByOpenid(openid, callback){
-    searchPMsByKey(openid,function(pms){
+exports.getPMByOpenid = function(openid, callback){
+    exports.searchPMsByKey(openid,function(pms){
         //console.log(pms);
         for(var i = 0; i < pms.length; i++) {
             if(pms[i].openid == openid) {
@@ -70,8 +66,8 @@ function getPMByOpenid(openid, callback){
 /**
  *  爬取公众号文章
  */
-function getArticlesByOpenid(openid, callback){
-    getPMByOpenid(openid,function(pm){
+exports.getArticlesByOpenid = function(openid, callback){
+    exports.getPMByOpenid(openid,function(pm){
         if(pm != null) {
             //  查询公众号文章
             http.get(pm.url,function(req,res) {
@@ -93,13 +89,13 @@ function getArticlesByOpenid(openid, callback){
 
                             // 每天第一篇文章
                             var article = {
-
                                 title : json.list[i].app_msg_ext_info.title, // 标题
                                 subtitle : json.list[i].app_msg_ext_info.digest, // 副标题
-                                pic : json.list[i].app_msg_ext_info.cover, // 文章首图
-                                url : 'https://mp.weixin.qq.com' + json.list[i].app_msg_ext_info.content_url, // 文章链接
+                                pic : json.list[i].app_msg_ext_info.cover.replace(/&amp;/g,'&'), // 文章首图
+                                url : 'https://mp.weixin.qq.com' + json.list[i].app_msg_ext_info.content_url.replace(/&amp;/g,'&'), // 文章链接
                                 datetime : parseInt(json.list[i].comm_msg_info.datetime)*1000, // 发布时间
-                                openid : openid,
+                                openid : pm.openid,
+                                auth : pm.name
                             };
                             articles.push(article);
 
@@ -108,10 +104,11 @@ function getArticlesByOpenid(openid, callback){
                                 var article = {
                                     title : json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].title, // 标题
                                     subtitle : json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].digest, // 副标题
-                                    pic : json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].cover, // 文章首图
-                                    url : 'https://mp.weixin.qq.com' + json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].content_url, // 文章链接
+                                    pic : json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].cover.replace(/&amp;/g,'&'), // 文章首图
+                                    url : 'https://mp.weixin.qq.com' + json.list[i].app_msg_ext_info.multi_app_msg_item_list[j].content_url.replace(/&amp;/g,'&'), // 文章链接
                                     datetime : parseInt(json.list[i].comm_msg_info.datetime)*1000, // 发布时间
                                     openid : openid,
+                                    auth : pm.name
                                 };
                                 articles.push(article);
                             }
@@ -134,14 +131,14 @@ function getArticlesByOpenid(openid, callback){
 }
 
 
-
-getArticlesByOpenid('neonan01',function(articles){
+/*
+exports.getArticlesByOpenid('neonan01',function(articles){
 
     articledb.saveArticles(articles,function(result){
         console.log(result);
     });
 });
-
+*/
 
 
 
