@@ -68,10 +68,122 @@ exports.getPMByOpenid = function(openid,callback) {
 
 /**
  * 保存用户关注的公众号
- * @param user
- * @param pm
+ * @param usercode 用户帐号
+ * @param pmOpenid 公众号openid
+ * @param  pmName 公众号名称
  * @param callback
  */
-exports.saveUserPM = function(user,pm,callback){
+exports.saveUserPM = function(usercode,pmOpenid,pmName,callback){
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
 
+            // 查询数据库是否存在这个用户的数据
+            var whereStr = {"user":usercode};
+            collection.findOne(whereStr,function(err, obj) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                else {
+                    if(!obj) {  // 如果不存在该用户的数据则新增一条数据
+                        obj = {
+                            user: usercode,
+                            pms: []
+                        }
+                    }
+                    obj.pms.push({
+                        openid : pmOpenid,
+                        name : pmName
+                    });
+                    // 更新数据
+                    collection.updateOne({"user":usercode},obj,{upsert:true}, function(err, result) {
+                        if(err)
+                        {
+                            console.error('Error:'+ err);
+                        }
+                        if(callback){
+                            callback(result);
+                        }
+                    });
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
+
+/**
+ * 删除用户关注的公众号
+ * @param usercode 用户帐号
+ * @param pmOpenid 公众号openid
+ * @param callback
+ */
+exports.deleteUserPM = function(usercode,pmOpenid,callback){
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
+
+            var whereStr = {"user":usercode};
+            collection.findOne(whereStr,function(err, obj) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                else if(obj) {
+                    collection.updateOne({"user":usercode},{ $pull: {pms : {openid:pmOpenid}}}, function(err, result) {
+                        if(err)
+                        {
+                            console.error('Error:'+ err);
+                        }
+                        if(callback){
+                            callback(result);
+                        }
+                    });
+                }
+                else {
+                    callback({result:{ok:1}});
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
+
+
+/**
+ * 查询用户关注的公众号
+ * @param  usercode 用户帐号
+ * @param callback
+ */
+exports.getPMByUsercode = function(usercode,callback) {
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
+            // 查询数据
+            var whereStr = {"user":usercode};
+            collection.findOne(whereStr,function(err, result) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                if(callback){
+                    callback(result);
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
 }

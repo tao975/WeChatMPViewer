@@ -34,9 +34,12 @@ router.get('/index/searchPM', function(req, res, next) {
 });
 
 /**
- *  查询公众号
+ *  关注公众号
  */
-router.post('/index/addPM', function(req, res, next) {
+router.post('/index/followPM', function(req, res, next) {
+
+    var usercode = "tao975";
+
     var pm = {
         openid : req.query.openid, // 公众号
         name : req.query.name, // 公众号名称
@@ -45,14 +48,56 @@ router.post('/index/addPM', function(req, res, next) {
         auth : req.query.auth, // 微信认证
         url : req.query.url // 链接
     };
+
+    // 保存公众号
     pmdb.savePM(pm, function(result){
+        if(result.result.ok == 1) {
+            // 保存用户和公众号关注关系
+            pmdb.saveUserPM(usercode,pm.openid,pm.name,function(result){
+                if(result.result.ok == 1) {
+                    res.send("success");
+                }
+                else {
+                    res.send("error");
+                }
+            });
+        }
+        else {
+            res.send("error");
+        }
+    })
+
+
+});
+
+/**
+ *  取消关注公众号
+ */
+router.post('/index/cancelFollowPM', function(req, res, next) {
+
+    var usercode = "tao975";
+    var pmOpenid = req.query.openid;
+
+    // 删除用户和公众号关注关系
+    pmdb.deleteUserPM(usercode,pmOpenid,function(result){
         if(result.result.ok == 1) {
             res.send("success");
         }
         else {
             res.send("error");
         }
+    });
 
+});
+
+
+/**
+ *  查询用户关注的公众号
+ */
+router.get('/index/searchUserFollowPM', function(req, res, next) {
+    var usercode = "tao975";
+    pmdb.getPMByUsercode(usercode, function(userFollowPM){
+        res.json(userFollowPM);
     })
 });
 

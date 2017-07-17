@@ -100,14 +100,6 @@ exports.getUserByUsername = function(username,callback) {
 }
 
 
-var user = {
-    openid : "tao289110312",
-    username : "tao",
-    usercode : "tao289110312",
-    phone : "12345",
-    password: "123"
-}
 
-exports.saveUser(user,function(result){
-    console.log(user);
-})
+
+

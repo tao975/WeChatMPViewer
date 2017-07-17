@@ -28,6 +28,7 @@ exports.searchPMsByKey = function(key,callback){
             // 使用cheerio解析html
             var $ = cheerio.load(html);
             var pms = []; // 保存爬取到的公众号
+            console.log(html);
             $(".gzh-box2").each(function(i, elem) {
                 var pm = {
                     openid : $(this).find("label[name='em_weixinhao']").text().trim(),  // 公众号ID

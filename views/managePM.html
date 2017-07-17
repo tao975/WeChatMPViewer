@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="/stylesheets/index.css">
     <link rel="stylesheet" href="/stylesheets/list.css">
+    <link rel="stylesheet" href="/plugin/jquery.gridly/jquery.gridly.css"  />
 
     <!--[if lt IE 10]>
     <script src="/javascripts/media.match.min.js"></script>
@@ -21,7 +22,7 @@
     <![endif]-->
 
 </head>
-<body ng-app="index" ng-controller="mainCtrl">
+<body ng-app="index" ng-controller="managePMCtrl">
 <!--[if lte IE 8]>
 <div class="text-center padding-top-50 padding-bottom-50 bg-blue-grey-100">
     <p class="browserupgrade font-size-18">你正在使用一个<strong>过时</strong>的浏览器。请升级您的浏览器，以提高您的体验。</p>
@@ -133,34 +134,9 @@
     </div>
 
     <!-- 公众号列表 -->
-    <div id="pmList" class="news-box" hidden>
-        <ul class="news-list2">
-            <li ng-repeat="pm in pms">
-                <div class="gzh-box2">
-                    <div class="img-box">
-                        <a href="{{pm.url}}"><span></span><img src="{{pm.img}}" style="width: 58px; height: auto; margin-top: 0px;"></a>
-                    </div>
-                    <div class="txt-box">
-                        <p class="tit">
-                            <a href="{{pm.url}}"><em>{{pm.name}}</em></a><i></i>
-                        </p>
-                        <p class="info">微信号：{{pm.openid}}
-                        </p>
-                    </div>
-                    <div class="ew-pop">
-                        <input id="butt_guanzhu_{{pm.openid}}" class="pull-left" type="button" style="width: 60px;height: 28px;border: 0;position: absolute;z-index: 2;right: 10px;top: 2px;color: #fff;background-color: #2bc126;border-radius: 5px;" value="关注" ng-click="addPM(pm)">
-                    </div>
-                </div>
-                <dl>
-                    <dt>功能介绍：</dt>
-                    <dd>{{pm.desc}}</dd>
-                </dl>
-                <dl>
-                    <dt>微信认证：</dt>
-                    <dd>{{pm.auth}}</dd>
-                </dl>
-            </li>
-        </ul>
+    <div class="gridly">
+        <div class="brick small"></div>
+
     </div>
 
 </div>
@@ -189,11 +165,39 @@
         class="icon wb-chevron-up" aria-hidden="true"></i></button>
 
 <script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
-<script src="/javascripts/metinfo.js"></script>
 <script src="/javascripts/util.js"></script>
 <script src="/plugin/angularjs/angular.min.js"></script>
 <script src="/javascripts/index/app.js"></script>
 <script src="/javascripts/index/controllers.js"></script>
+<script src="/plugin/jquery.gridly/jquery.gridly.js" type="text/javascript"></script>
+<style type="text/css">
+    .gridly {
+        position: relative;
+        width: 960px;
+
+    }
+    .brick.small {
+        width: 140px;
+        height: 140px;
+        background-color: #00b5ec;
+        margin: 5px;
+    }
+    .brick.large {
+        width: 140px;
+        height: 140px;
+        background-color: #00a06a;
+        margin: 5px;
+    }
+</style>
+<script>
+    $(function() {
+        $('.gridly').gridly({
+            base: 60, // px
+            gutter: 20, // px
+            columns: 6
+        })
+    });
+</script>
 
 </body>
 </html>

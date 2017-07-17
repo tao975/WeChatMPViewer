@@ -121,7 +121,6 @@ exports.getArticlesByKey = function(key, callback) {
             var whereStr = {}
 
             if(key != null && key != '') {
-                //key = '/' + key + '/';
                 whereStr = { $or: [
                     {title: {$regex:key}},
                     {openid:{$regex:key}},
