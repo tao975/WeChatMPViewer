@@ -28,7 +28,6 @@ exports.searchPMsByKey = function(key,callback){
             // 使用cheerio解析html
             var $ = cheerio.load(html);
             var pms = []; // 保存爬取到的公众号
-            console.log(html);
             $(".gzh-box2").each(function(i, elem) {
                 var pm = {
                     openid : $(this).find("label[name='em_weixinhao']").text().trim(),  // 公众号ID
@@ -77,9 +76,7 @@ exports.getArticlesByOpenid = function(openid, callback){
                     html += data;
                 });
                 req.on('end', function () {
-                    // console.log(html);
-                    // 使用cheerio解析html
-                    var $ = cheerio.load(html);
+                    //console.log(html);
                     var articles = []; // 保存爬取到的公众号文章
                     var res = html.match(/msgList.*;/g);
                     if(res != null && res.length > 0) {

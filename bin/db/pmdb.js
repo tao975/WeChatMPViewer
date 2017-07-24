@@ -70,10 +70,11 @@ exports.getPMByOpenid = function(openid,callback) {
  * 保存用户关注的公众号
  * @param usercode 用户帐号
  * @param pmOpenid 公众号openid
- * @param  pmName 公众号名称
+ * @param pmName 公众号名称
+ * @param pmImg 公众号头像
  * @param callback
  */
-exports.saveUserPM = function(usercode,pmOpenid,pmName,callback){
+exports.saveUserPM = function(usercode,pmOpenid,pmName,pmImg,callback){
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         if(!err) {
             // 连接到表 user_pm
@@ -95,7 +96,8 @@ exports.saveUserPM = function(usercode,pmOpenid,pmName,callback){
                     }
                     obj.pms.push({
                         openid : pmOpenid,
-                        name : pmName
+                        name : pmName,
+                        img : pmImg
                     });
                     // 更新数据
                     collection.updateOne({"user":usercode},obj,{upsert:true}, function(err, result) {

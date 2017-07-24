@@ -13,5 +13,15 @@ router.get('/', function(req, res, next) {
     res.redirect("article.html");
 });
 
+/**
+ *  获取文章
+ */
+router.get('/searchArticles', function(req, res, next) {
+    var key = req.query.key;
+    articledb.getArticlesByKey(key, function(articles){
+      res.json(articles);
+    })
+});
+
 
 module.exports = router;

@@ -26,7 +26,7 @@ ol, ul {
     zoom: 1;
 }
 
-.news-list2 li .img-box {
+ .img-box {
     float: left;
     margin-right: 10px;
     position: relative;
@@ -37,7 +37,7 @@ ol, ul {
     overflow: hidden;
 }
 
-.news-list2 li .txt-box {
+ .txt-box {
     float: left;
     width: 50%;
     line-height: 24px;
@@ -77,4 +77,67 @@ ol, ul {
 em {
     color: #00a06a;
     font-style: normal;
+}
+
+.gridly {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height:300px;
+}
+
+.pm_div {
+    width: 65px;
+    height: 100px;
+    text-align: center;
+    margin: 7px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.pm_div:hover
+{
+    background-color:#3ac8f3;
+    color: #fff;
+}
+
+.pm_img {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    margin: 5px;
+}
+
+.pm_name {
+    font-size: 12px;
+    line-height: 16px;
+    padding-top: 5px;
+}
+
+.gbin1-list {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+.gbin1-list li {
+    float: left;
+}
+
+.check {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+}
+
+.uncheck {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    display: none;
 }

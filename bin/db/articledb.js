@@ -90,7 +90,7 @@ exports.getArticles = function(callback) {
             var collection = db.collection('article');
             // 查询数据
             var whereStr = {};
-            collection.find(whereStr).toArray(function(err, result) {
+            collection.find(whereStr).sort({datetime:-1}).toArray(function(err, result) {
                 if(err)
                 {
                     console.log('Error:'+ err);
@@ -129,7 +129,7 @@ exports.getArticlesByKey = function(key, callback) {
             }
 
             // 查询数据
-            collection.find(whereStr).toArray(function(err, result) {
+            collection.find(whereStr).sort({datetime:-1}).limit(5).toArray(function(err, result) {
                 if(err)
                 {
                     console.log('Error:'+ err);
