@@ -8,7 +8,6 @@ angular.module('index.controllers', [])
 	
 	//  查询文章
 	$scope.searchArticle = function(){
-	    alert($scope.searchword);
 		$http({
             url: getRootPath() + '/article/searchArticles',
             method: 'get',
@@ -27,10 +26,14 @@ angular.module('index.controllers', [])
         });
 	}
 
+    //  查询公众号
+    $scope.searchPM = function(){
+        window.location.href = getRootPath() + '/pm.html?searchword=' + $scope.searchword.trim();
+    }
+
 	// 初始化
 	$scope.init = function(){
         $scope.searchword = $location.search().searchword || "";
-        console.log($scope.searchword);
         $scope.searchArticle();
     }
 
@@ -38,12 +41,13 @@ angular.module('index.controllers', [])
 
 })
 
-.controller('pmCtrl', function($scope, $http) {
+.controller('pmCtrl', function($scope, $http,$location) {
 
     $scope.userFollowPMs = []; // 用户关注的公众号列表
-    $scope.userFollowPMOpenids = [];
+    $scope.userFollowPMOpenids = []; // 保存用户关注的公众号openid，用于判断是否已关注
     $scope.searchPMs = []; // 查询的公众号列表
     $scope.searchword = ""; // 搜索关键字
+    $scope.isShowFollowPM = true;
 
     //  查询文章
     $scope.searchArticle = function(){
@@ -65,8 +69,7 @@ angular.module('index.controllers', [])
                 }
             }).success(function (result,status,config,headers,statusText) { //响应成功
                 $scope.searchPMs = result;
-                $("#searchPmList").show();
-                $("#userFollowPMList").hide();
+                $scope.isShowFollowPM = false;
                 if($scope.searchPMs.length == 0) {
                     $("#errMsg").html("没有查询到公众号！");
                 }
@@ -93,12 +96,21 @@ angular.module('index.controllers', [])
         });
     }
 
+    // 显示已关注的公众号
+    $scope.showFollowPM = function(){
+        $("#searchPmList").slideToggle();
+        $("#userFollowPMList").slideToggle();
+        $scope.isShowFollowPM = !$scope.isShowFollowPM;
+    }
+
     //  关注或取消关注公众号
     $scope.followPM = function(pm){
 
-        if($("#butt_guanzhu_" + pm.openid).val() == "关注") {
+        var isFollow = $scope.userFollowPMOpenids.indexOf(pm.openid) == -1;  // 判断要关注还是取消关注
+
+        if(isFollow) {  // 关注公众号
             $http({
-                url: getRootPath() + '/index/followPM',
+                url: getRootPath() + '/pm/followPM',
                 method: 'post',
                 params: {
                     openid : pm.openid, // 公众号
@@ -110,9 +122,21 @@ angular.module('index.controllers', [])
                 }
             }).success(function (result,status,config,headers,statusText) { //响应成功
                 if(result == "success") {
-                    //  $("#butt_guanzhu_" + pm.openid).val("已关注");
-                    // $("#butt_guanzhu_" + pm.openid).css("background-color","#3ac8f3");
-                    $scope.userFollowPMs.push(pm.openid);
+                    // 如果列表中不存在则添加
+                    if($scope.userFollowPMOpenids.indexOf(pm.openid) == -1) {
+                        $scope.userFollowPMOpenids.push(pm.openid);
+                    }
+                    var flag = false;
+                    for(var i = 0; i < $scope.userFollowPMs.length; i++){
+                        if($scope.userFollowPMs[i].openid == pm.openid) {
+                            flag = true;
+                            break;
+                        }
+
+                    }
+                    if(!flag){
+                        $scope.userFollowPMs.push(pm);
+                    }
                 }
                 else {
                     alert("系统错误！关注失败");
@@ -121,18 +145,25 @@ angular.module('index.controllers', [])
                 alert("系统错误！关注失败");
             });
         }
-        else {
+        else {   // 取消关注公众号
             $http({
-                url: getRootPath() + '/index/cancelFollowPM',
+                url: getRootPath() + '/pm/cancelFollowPM',
                 method: 'post',
                 params: {
                     openid : pm.openid
                 }
             }).success(function (result,status,config,headers,statusText) { //响应成功
                 if(result == "success") {
-                    //  $("#butt_guanzhu_" + pm.openid).val("关注");
-                    //  $("#butt_guanzhu_" + pm.openid).css("background-color","#2bc126");
-                    $scope.userFollowPMs.splice($scope.userFollowPMs.indexOf(pm.openid),1);
+                    // $scope.userFollowPMOpenids 列表中删除公众号，能够显示未关注的状态
+                    $scope.userFollowPMOpenids.splice($scope.userFollowPMOpenids.indexOf(pm.openid),1);
+                    // $scope.userFollowPMs 不删除该公众号是为了能够在关注的公众号页面中继续显示该公众号，方面能够继续选中
+                    /*
+                    for(var i = 0; i < $scope.userFollowPMs.length; i++) {
+                        if($scope.userFollowPMs[i].openid == pm.openid) {
+                            $scope.userFollowPMs.splice(i,1);
+                        }
+                    }
+                    */
                 }
                 else {
                     alert("系统错误！取消关注失败");
@@ -147,7 +178,14 @@ angular.module('index.controllers', [])
     $scope.init = function(){
         // 加载用户关注的公众号
         $scope.searchUserFollowPM();
-        $("#userFollowPMList").show();
+        $scope.searchword = $location.search().searchword;
+        if($scope.searchword) {
+            $scope.isShowFollowPM = false;
+            $scope.searchPM();
+        }
+        else {
+            $scope.isShowFollowPM = true;
+        }
     }
 
     $scope.init();

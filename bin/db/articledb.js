@@ -78,40 +78,14 @@ exports.getArticleByTitle = function(title,callback) {
     });
 }
 
-
-/**
- * 获取文章列表
- * @param callback
- */
-exports.getArticles = function(callback) {
-    MongoClient.connect(DB_CONN_STR, function(err, db) {
-        if(!err) {
-            // 连接到表 article
-            var collection = db.collection('article');
-            // 查询数据
-            var whereStr = {};
-            collection.find(whereStr).sort({datetime:-1}).toArray(function(err, result) {
-                if(err)
-                {
-                    console.log('Error:'+ err);
-                }
-                if(callback){
-                    callback(result);
-                }
-                db.close();
-            });
-        }
-        else {
-            console.error("连接失败！" + err);
-        }
-    });
-}
-
 /**
  * 关键字搜索文章
+ * @param key 搜索关键字
+ * @param pageIndex 页码
+ * @param pageSize 每页条数
  * @param callback
  */
-exports.getArticlesByKey = function(key, callback) {
+exports.getArticlesByKey = function(key,pageIndex,pageSize, callback) {
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         if(!err) {
             // 连接到表 article
@@ -128,8 +102,16 @@ exports.getArticlesByKey = function(key, callback) {
                 ]};
             }
 
+            if(isNaN(pageIndex)) {
+                pageIndex = 1;
+            }
+
+            if(isNaN(pageSize)){
+                pageSize = 0;
+            }
+
             // 查询数据
-            collection.find(whereStr).sort({datetime:-1}).limit(5).toArray(function(err, result) {
+            collection.find(whereStr).sort({datetime:-1}).skip((pageIndex-1)*pageSize).limit(pageSize).toArray(function(err, result) {
                 if(err)
                 {
                     console.log('Error:'+ err);

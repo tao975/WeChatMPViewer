@@ -25,23 +25,34 @@ exports.searchPMsByKey = function(key,callback){
             html+=data;
         });
         req.on('end',function(){
-            // 使用cheerio解析html
-            var $ = cheerio.load(html);
+
             var pms = []; // 保存爬取到的公众号
-            $(".gzh-box2").each(function(i, elem) {
-                var pm = {
-                    openid : $(this).find("label[name='em_weixinhao']").text().trim(),  // 公众号ID
-                    name : $(this).find(".tit").children('a').text().trim(), // 公众号名称
-                    img : $(this).find(".img-box").find("img").attr("src"), // 头像
-                    desc : $(this).next() == undefined ? '' : $(this).next().children("dd").text(), // 介绍
-                    auth : $(this).next().next() == undefined ? '' : $(this).next().next().children("dd").text(), // 微信认证
-                    url : $(this).find(".tit").children('a').attr("href") // 链接
-                }
-                pms.push(pm);
-            });
+
+            if(html.indexOf("gzh-box2") == -1){
+                console.error("爬取公众号出错了！");
+                console.info(html);
+            }
+            else {
+                // 使用cheerio解析html
+                var $ = cheerio.load(html);
+
+                $(".gzh-box2").each(function(i, elem) {
+                    var pm = {
+                        openid : $(this).find("label[name='em_weixinhao']").text().trim(),  // 公众号ID
+                        name : $(this).find(".tit").children('a').text().trim(), // 公众号名称
+                        img : $(this).find(".img-box").find("img").attr("src"), // 头像
+                        desc : $(this).next() == undefined ? '' : $(this).next().children("dd").text(), // 介绍
+                        auth : $(this).next().next() == undefined ? '' : $(this).next().next().children("dd").text(), // 微信认证
+                        url : $(this).find(".tit").children('a').attr("href") // 链接
+                    }
+                    pms.push(pm);
+                });
+            }
+
             if(callback) {
                 callback(pms);
             }
+
         });
     });
 }

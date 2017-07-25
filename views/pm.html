@@ -10,6 +10,7 @@
     <meta name="generator" content="MetInfo 5.3.16"
           data-variable="http://show.metinfo.cn/muban/M1601005/364/,en,10001,,10001,M1601005">
     <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/index.css">
 
 </head>
 <body ng-app="index" ng-controller="pmCtrl">
@@ -19,9 +20,13 @@
 
 <div id="container">
 
-    <!-- 搜索公众号列表 -->
-    <div id="searchPmList" class="news-box" hidden>
+    <div class="btn btn-squared btn-primary" style="width: 100%; cursor: pointer;" ng-click="showFollowPM()">
+        <sapn ng-if="!isShowFollowPM">查看已关注的公众号</sapn>
+        <sapn ng-if="isShowFollowPM">显示搜索页面</sapn>
+    </div>
 
+    <!-- 搜索公众号列表 -->
+    <div id="searchPmList" class="news-box" ng-show="!isShowFollowPM">
         <ul class="news-list2">
             <li ng-repeat="pm in searchPMs" >
                 <div class="gzh-box2">
@@ -36,8 +41,8 @@
                         </p>
                     </div>
                     <div class="ew-pop">
-                        <input id="butt_guanzhu_{{pm.openid}}" class="pull-left" type="button" style="width: 60px;height: 28px;border: 0;position: absolute;z-index: 2;right: 20px;top: 2px;color: #fff;background-color: #2bc126;border-radius: 5px;" value="关注" ng-click="followPM(pm)" ng-if="userFollowPMOpenids.indexOf(pm.openid) == -1">
-                        <input id="butt_guanzhu_{{pm.openid}}" class="pull-left" type="button" style="width: 60px;height: 28px;border: 0;position: absolute;z-index: 2;right: 20px;top: 2px;color: #fff;background-color: #3ac8f3;border-radius: 5px;" value="已关注" ng-click="followPM(pm)" ng-if="userFollowPMOpenids.indexOf(pm.openid) > -1">
+                        <input id="butt_guanzhu_{{pm.openid}}" class="unfollow-btn pull-left" type="button" value="关注" ng-click="followPM(pm)" ng-if="userFollowPMOpenids.indexOf(pm.openid) == -1">
+                        <input id="butt_guanzhu_{{pm.openid}}" class="follow-btn pull-left" type="button" value="已关注" ng-click="followPM(pm)" ng-if="userFollowPMOpenids.indexOf(pm.openid) > -1">
                     </div>
                 </div>
                 <dl>
@@ -53,11 +58,11 @@
     </div>
 
     <!-- 用户关注公众号列表 -->
-    <div class="gridly" id="userFollowPMList" hidden>
+    <div class="gridly" id="userFollowPMList" ng-show="isShowFollowPM">
         <ul class="gbin1-list ">
             <li ng-repeat="pm in userFollowPMs" >
                 <div class="pm_div" ng-click="followPM(pm)" id="pm_div_{{pm.openid}}" >
-                    <img class="check" src="/images/t11.png" id="check_{{pm.openid}}">
+                    <img class="check" src="/images/t11.png" id="check_{{pm.openid}}" ng-if="userFollowPMOpenids.indexOf(pm.openid) > -1">
                     <img class="pm_img" src="{{pm.img}}" ><br/>
                     <p class="pm_name">{{pm.name}}</p>
                 </div>

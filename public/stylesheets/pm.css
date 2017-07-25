@@ -125,6 +125,32 @@ em {
     float: left;
 }
 
+.unfollow-btn {
+    width: 60px;
+    height: 28px;
+    border: 0;
+    position: absolute;
+    z-index: 2;
+    right: 20px;
+    top: 2px;
+    color: #fff;
+    background-color: #2bc126;
+    border-radius: 5px;
+}
+
+.follow-btn {
+    width: 60px;
+    height: 28px;
+    border: 0;
+    position: absolute;
+    z-index: 2;
+    right: 20px;
+    top: 2px;
+    color: #fff;
+    background-color: #3ac8f3;
+    border-radius: 5px;
+}
+
 .check {
     width: 50px;
     height: 50px;
