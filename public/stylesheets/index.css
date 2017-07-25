@@ -13076,3 +13076,11 @@ html {-ms-overflow-style: scrollbar;}
 .pt0{padding-top:0px !important;}
 .footwimg{max-width:160px;}
 .socialPre a{width:30px; display:inline-block; margin-bottom:5px;}
+
+.message {
+  text-align: center;
+  background-color: #e9595b;
+  margin: 10px auto;
+  padding: 5px;
+  color: #fff;
+}

@@ -101,7 +101,7 @@
     -->
 
     <!-- 文章列表 -->
-    <div id="met_card_list" class="lg-container met-index-product" hidden>
+    <div id="met_card_list" class="lg-container met-index-product" hidden infinite-scroll="scrollLoad()" infinite-scroll-disabled="isScrollLoading" infinite-scroll-distance="1">
 
         <div class="col-sm-6" ng-repeat="article in articles">
             <div class="met_multi_img animate-item animate-start">
@@ -124,6 +124,8 @@
 
             </div>
         </div>
+        <div class="message" ng-show="isScrollLoading">正在加载文章...</div>
+        <div class="message" ng-show="isEnd">没有新的文章了</div>
     </div>
 
 
@@ -136,6 +138,7 @@
 <script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
 <script src="/javascripts/util.js"></script>
 <script src="/plugin/angularjs/angular.min.js"></script>
+<script src="/plugin/ngInfiniteScroll-1.0.0/ng-infinite-scroll.min.js"></script>
 <script src="/javascripts/index/app.js"></script>
 <script src="/javascripts/index/controllers.js"></script>
 

@@ -5,23 +5,52 @@ angular.module('index.controllers', [])
 
 	$scope.articles = []; // 文章列表
     $scope.searchword = ""; // 搜索关键字
-	
+    $scope.pageIndex = 1; // 页码
+    $scope.pageSize = 5; // 每页条数
+    $scope.isScrollLoading = true; // 是否正在滚动加载文章，默认为true，因为第一次加载时如果为false会触发滚动加载函数，会重复加载
+    $scope.isEnd = false; // 是否已加载到底部
+
 	//  查询文章
 	$scope.searchArticle = function(){
+
+	    // 如果不是滚动加载，则是点击搜索，pageIndex设为1
+        if(!$scope.isScrollLoading){
+            $scope.pageIndex = 1;
+        }
+
 		$http({
             url: getRootPath() + '/article/searchArticles',
             method: 'get',
             params: {
-                key : $scope.searchword.trim()
+                key : $scope.searchword.trim(),
+                pageIndex : $scope.pageIndex,
+                pageSize : $scope.pageSize
             }
-        }).success(function (result,status,config,headers,statusText) { //响应成功
-            $scope.articles = result;
-            $("#pmList").hide();
-            $("#met_card_list").show();
-            if($scope.articles.length == 0) {
+        }).success(function (result,status,config,headers,statusText) { // 响应成功
+
+            // 如果是滚动到页面底部加载文章，则追加文章，否则是搜索文章，要覆盖原来的文章列表
+            if($scope.isScrollLoading) {
+                $scope.articles = $scope.articles.concat(result);
+                $scope.isScrollLoading = false;
+            }
+            else {
+                $scope.articles = result;
+            }
+
+            if(result.length == 0) {
+                $scope.isEnd = true;
+            }
+
+            if($scope.articles.length == 0){
                 $("#errMsg").html("没有查询到文章！");
             }
-        }).error(function (data,status,config,headers,statusText) { //处理响应失败
+            else {
+                $("#errMsg").html("");
+            }
+
+            $("#met_card_list").show();
+
+        }).error(function (data,status,config,headers,statusText) { // 处理响应失败
             alert("加载错误！");
         });
 	}
@@ -29,6 +58,17 @@ angular.module('index.controllers', [])
     //  查询公众号
     $scope.searchPM = function(){
         window.location.href = getRootPath() + '/pm.html?searchword=' + $scope.searchword.trim();
+    }
+
+    // 页面滚动到底部触发函数，加载文章
+    $scope.scrollLoad = function(){
+        if($scope.isScrollLoading || $scope.isEnd) {  // 如果正在加载或已加载到全部文章则不继续加载
+            return;
+        }
+        console.log("加载文章！");
+        $scope.isScrollLoading = true;
+        $scope.pageIndex++;
+        $scope.searchArticle();
     }
 
 	// 初始化
