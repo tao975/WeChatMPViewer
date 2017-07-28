@@ -131,8 +131,44 @@ angular.module('index.controllers', [])
             for(var i = 0; i < result.pms.length; i++) {
                 $scope.userFollowPMOpenids.push(result.pms[i].openid);
             }
+
+            // 等待1秒钟，等页面加载完之后，初始化拖拽手势代码
+            setTimeout(function(){
+                $scope.dragOnApp();
+            },1000);
         }).error(function (data,status,config,headers,statusText) { //处理响应失败
             alert("加载错误！");
+        });
+    }
+
+    // 拖拽关注的公众号
+    $scope.dragOnApp = function(){
+        var dx,dy; // 保存div webkitTransform 坐标
+        touch.on('.pm_div', 'touchstart', function(ev) {
+            ev.preventDefault();
+            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
+            if(ev.target.tagName == "DIV") {
+                var transform = ev.target.style.webkitTransform;
+            }
+            else {
+                var transform = ev.target.parentNode.style.webkitTransform;
+            }
+            var transforms = transform.split(",");
+            dx = transforms.length > 1 ? transforms[0].substring(12,transforms[0].indexOf("px")) : 0;
+            dy = transforms.length > 1 ? transforms[1].substring(1,transforms[1].indexOf("px")) : 0;
+        });
+        touch.on('.pm_div', 'drag', function(ev) {
+            var offx = parseFloat(dx) + ev.x + "px";
+            var offy = parseFloat(dy) + ev.y + "px";
+            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
+            if(ev.target.tagName == "DIV") {
+                ev.target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+            }
+            else {
+                ev.target.parentNode.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+            }
+        });
+        touch.on('.pm_div', 'dragend', function(ev) {
         });
     }
 
@@ -213,6 +249,7 @@ angular.module('index.controllers', [])
             });
         }
     }
+
 
     // 初始化
     $scope.init = function(){

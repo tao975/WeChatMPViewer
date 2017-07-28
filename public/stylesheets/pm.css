@@ -94,6 +94,8 @@ em {
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    float: left;
+    z-index: 999;
 }
 
 .pm_div:hover

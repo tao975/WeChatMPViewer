@@ -59,15 +59,12 @@
 
     <!-- 用户关注公众号列表 -->
     <div class="gridly" id="userFollowPMList" ng-show="isShowFollowPM">
-        <ul class="gbin1-list ">
-            <li ng-repeat="pm in userFollowPMs" >
-                <div class="pm_div" ng-click="followPM(pm)" id="pm_div_{{pm.openid}}" >
-                    <img class="check" src="/images/t11.png" id="check_{{pm.openid}}" ng-if="userFollowPMOpenids.indexOf(pm.openid) > -1">
-                    <img class="pm_img" src="{{pm.img}}" ><br/>
-                    <p class="pm_name">{{pm.name}}</p>
-                </div>
-            </li>
-        </ul>
+
+        <div class="pm_div" ng-click="followPM(pm)" id="pm_div_{{pm.openid}}" ng-repeat="pm in userFollowPMs"  draggable="false">
+            <img class="check" src="/images/t11.png" id="check_{{pm.openid}}" ng-if="userFollowPMOpenids.indexOf(pm.openid) > -1">
+            <img class="pm_img" src="{{pm.img}}" ><br/>
+            <p class="pm_name">{{pm.name}}</p>
+        </div>
     </div>
 
     <br/><br/>
@@ -77,11 +74,15 @@
 <!-- footer -->
 <div ng-include="'footer.html'"></div>
 
-<script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
 <script src="/javascripts/util.js"></script>
+<script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
+<script src="/plugin/touchjs/touch-0.2.14.min.js"></script>
+<script src="/plugin/hammer/hammer.min.js"></script>
 <script src="/plugin/angularjs/angular.min.js"></script>
+<script src="/plugin/ngInfiniteScroll-1.0.0/ng-infinite-scroll.min.js"></script>
 <script src="/javascripts/index/app.js"></script>
 <script src="/javascripts/index/controllers.js"></script>
+
 
 </body>
 </html>
