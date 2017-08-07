@@ -1,5 +1,5 @@
 /**
- * 爬取微信公众号文章
+ * 搜狗微信爬虫
  * Created by tao on 2017/7/10.
  */
 
@@ -140,6 +140,7 @@ exports.getArticlesByOpenid = function(openid, callback){
 }
 
 
+
 /*
 exports.getArticlesByOpenid('neonan01',function(articles){
 
@@ -148,6 +149,9 @@ exports.getArticlesByOpenid('neonan01',function(articles){
     });
 });
 */
+
+
+
 
 
 
