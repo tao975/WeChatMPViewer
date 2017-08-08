@@ -6,9 +6,10 @@
 var http = require('http');
 var fs = require('fs');
 var cheerio = require('cheerio');
-var articledb = require('../db/articledb');
 var request = require('request');
 var express = require('express');
+var schedule = require("node-schedule");
+var moment = require("moment");
 var app = express();
 
 
@@ -18,18 +19,33 @@ var app = express();
 exports.searchPMsByKey = function(key,callback){
 
     var searchUrl = "http://weixin.sogou.com/weixin?type=1&query="+encodeURI(key); // 查询公众号url
+
+    var options = {
+        hostname:'weixin.sogou.com',
+        port:80,
+        path:"/weixin?type=1&query="+encodeURI(key),
+        method:'GET',
+        headers:{
+            'Host':'weixin.sogou.com',
+            'Referer':'weixin.sogou.com',
+            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+        }
+
+    }
+
+
     //  查询公众号
-    http.get(searchUrl,function(req,res){
+    var req = http.request(options,function(res){
         var html=''; // 保存爬回来的页面
-        req.on('data',function(data){
+        res.on('data',function(data){
             html+=data;
         });
-        req.on('end',function(){
+        res.on('end',function(){
 
             var pms = []; // 保存爬取到的公众号
 
             if(html.indexOf("gzh-box2") == -1){
-                console.error("爬取公众号出错了！");
+                console.error("爬取公众号出错了！"); // 出现 302 Found 错误
                 console.info(html);
             }
             else {
@@ -54,7 +70,10 @@ exports.searchPMsByKey = function(key,callback){
             }
 
         });
+    }).on('error', function(e) {
+        console.error("searchPMsByKey error: " + e.message);
     });
+    req.end();
 }
 
 /**
@@ -75,9 +94,14 @@ exports.getPMByOpenid = function(openid, callback){
 }
 
 /**
- *  爬取公众号文章
+ * 爬取公众号文章
+ * 因为每个公众号的历史文章的连接有失效期，会过期，所以不能直接请求公众号历史文章的连接来获取历史文章
+ * 处理方式：通过搜狗微信先搜索公众号，然后访问的公众号文章的连接，再解析
+ * @param openid 公众号ID
+ * @param day 日期，爬取指定日期的文章，yyyyMMdd
+ * @param callback
  */
-exports.getArticlesByOpenid = function(openid, callback){
+exports.getArticlesByOpenid = function(openid,day,callback){
     exports.getPMByOpenid(openid,function(pm){
         if(pm != null) {
             //  查询公众号文章
@@ -106,7 +130,17 @@ exports.getArticlesByOpenid = function(openid, callback){
                                 openid : pm.openid,
                                 auth : pm.name
                             };
-                            articles.push(article);
+
+                            // 如果指定采集文章的时间，需判断是否是这天的文章
+                            if(day) {
+                                var articledate = moment(new Date(article.datetime)).format('YYYYMMDD');
+                                if(day == articledate) {
+                                    articles.push(article);
+                                }
+                            }
+                            else {
+                                articles.push(article);
+                            }
 
                             // 每天后面几篇文章
                             for(var j = 0; j < json.list[i].app_msg_ext_info.multi_app_msg_item_list.length; j++) {
@@ -119,13 +153,25 @@ exports.getArticlesByOpenid = function(openid, callback){
                                     openid : openid,
                                     auth : pm.name
                                 };
-                                articles.push(article);
+                                // 如果指定采集文章的时间，需判断是否是这天的文章
+                                if(day) {
+                                    var articledate = moment(new Date(article.datetime)).format('YYYYMMDD');
+                                    if(day == articledate) {
+                                        articles.push(article);
+                                    }
+                                }
+                                else {
+                                    articles.push(article);
+                                }
                             }
                         }
 
                     }
+                    else if(html.indexOf("") > -1) {
+                        console.error("爬取文章有误！需要输入验证码！");  // 访问太多次需要验证码，待处理
+                    }
                     else {
-                        console.error("爬取文章有误！");  // 访问太多次需要验证码，待处理
+                        console.error("爬取文章有误！");
                     }
 
                     //console.log(articles);
@@ -138,19 +184,6 @@ exports.getArticlesByOpenid = function(openid, callback){
         }
     })
 }
-
-
-
-/*
-exports.getArticlesByOpenid('neonan01',function(articles){
-
-    articledb.saveArticles(articles,function(result){
-        console.log(result);
-    });
-});
-*/
-
-
 
 
 

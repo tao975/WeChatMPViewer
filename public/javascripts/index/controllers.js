@@ -267,4 +267,8 @@ angular.module('index.controllers', [])
 
     $scope.init();
 })
+
+.controller('userCtrl', function($scope, $http,$location) {
+
+})
 ;

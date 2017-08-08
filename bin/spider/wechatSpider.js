@@ -26,7 +26,7 @@ exports.spiderMP = function(){
             __biz : 'MzIyMjMyMjQxOA==', // 公众号id，base64加密
           //  scene : '124',
             uin : 'NTMwMTIwMzYw',  // 固定值
-            key : 'c969774f949c279b04f6d5084dcc41c47b7adcf46689aa839d41edb7d3eb36a026a3e581d86801b637423c65384b5b578318947f1fa7ead227a79ec4dd5e6181172e35f2a2644483b00c5040f7de30f0'  // key有 有效期，会过期
+            key : 'c969774f949c279b04f6d5084dcc41c47b7adcf46689aa839d41edb7d3eb36a026a3e581d86801b637423c65384b5b578318947f1fa7ead227a79ec4dd5e6181172e35f2a2644483b00c5040f7de30f0'  // key有时效性，会过期
         },
         headers: {
             //  'Cookie': 'wxtokenkey=97d7a529f26b6529a801c94d0e442cfddba17fe22e3a7e4fb57953ecf4bbe033; wxuin=530120360; pass_ticket=xYUStMdaSca5QUyQhMjTJMhJhTnjvhvsfqjNNdxmlbCfZ1jnvNCZVtos12tc7Niq; wap_sid2=CKj94/wBElxyS2tETmNFdy1RakpxVkdpZ0tWbndZTTEyUGdoWXJJNXBYTUc4d2F3R3RiRXBxZ3ptaXBsWkVoYU5JbU5IYURCeVowOUNXNmFOOTllSDlIbDdYSE1XcE1EQUFBfjC/zvrLBTgMQJRO',

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html class="js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths tablesaw-enhanced">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="never">  <!--处理图片不能外链 -->
+    <title>微信公众号</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="generator" content="MetInfo 5.3.16"
+          data-variable="http://show.metinfo.cn/muban/M1601005/364/,en,10001,,10001,M1601005">
+    <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" type="text/css" href="/plugin/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/plugin/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/metinfo.css" />
+
+</head>
+<body ng-app="index" ng-controller="userCtrl">
+<base href="/" />
+
+<div class="container met-head">
+
+    <div class="row">
+        <div class="col-xs-10 col-sm-10 logo">
+            <ul class="list-none">
+                <li><img src="/images/logo.jpg" style="width: 55px; height: 55px; " /></li>
+
+                <li>&nbsp;&nbsp;用户注册</li>
+
+            </ul>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="login_index met-member">
+    <div class="container">
+        <form method="post" action="">
+            <input type="hidden" name="gourl" value="" />
+            <div class="form-group">
+                <input type="text" name="username" required class="form-control" placeholder="请输入帐号"
+                       data-bv-notempty="true"
+                       data-bv-notempty-message="用户帐号不可为空"
+                >
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" required class="form-control" placeholder="请输入密码"
+                       data-bv-notempty="true"
+                       data-bv-notempty-message="密码不可为空"
+                >
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" required class="form-control" placeholder="请再次输入密码"
+                       data-bv-notempty="true"
+                       data-bv-notempty-message="密码不可为空"
+                >
+            </div>
+            <div class="row login_code">
+                <div class="col-xs-7">
+                    <div class="form-group">
+                        <input type="text" name="code" required="" class="form-control" placeholder="验证码" data-bv-notempty="true" data-bv-notempty-message="This is required and cannot be empty" data-bv-field="code">
+                        <small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">This is required and cannot be empty</small></div>
+                </div>
+                <div class="col-xs-5 login_code_img">
+                    <img src="https://show.metinfo.cn/muban/M1601005/364/app/system/entrance.php?m=include&amp;c=ajax_pin&amp;a=dogetpin" class="img-responsive" id="getcode" title="Changer Code" align="absmiddle">
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">立即注册</button>
+
+            <a class="btn btn-lg btn-info btn-block" href="login.html">已经有帐号了？赶紧登录吧！</a>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- footer -->
+<div ng-include="'footer.html'" style="position: fixed; bottom: 0px; width: 100%;"></div>
+
+
+<script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
+<script src="/javascripts/util.js"></script>
+<script src="/plugin/angularjs/angular.min.js"></script>
+<script src="/plugin/ngInfiniteScroll-1.0.0/ng-infinite-scroll.min.js"></script>
+<script src="/javascripts/index/app.js"></script>
+<script src="/javascripts/index/controllers.js"></script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@ var express = require('express');
 var https = require('https');
 var articledb = require('../bin/db/articledb');
 var pmdb = require('../bin/db/pmdb');
-var spider = require('../bin/spider/spider');
+var spider = require('../bin/spider/sougouWeixinSpider');
 var router = express.Router();
 
 /**

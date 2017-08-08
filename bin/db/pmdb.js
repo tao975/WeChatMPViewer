@@ -67,6 +67,34 @@ exports.getPMByOpenid = function(openid,callback) {
 }
 
 /**
+ * 获取公众号列表
+ * @param callback
+ */
+exports.getPms = function(callback) {
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 pm
+            var collection = db.collection('pm');
+            // 查询数据
+            var whereStr = {};
+            collection.find(whereStr).toArray(function(err, result) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                if(callback){
+                    callback(result);
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
+
+/**
  * 保存用户关注的公众号
  * @param usercode 用户帐号
  * @param pmOpenid 公众号openid
@@ -171,7 +199,6 @@ exports.getPMByUsercode = function(usercode,callback) {
         if(!err) {
             // 连接到表 user_pm
             var collection = db.collection('user_pm');
-            // 查询数据
             var whereStr = {"user":usercode};
             collection.findOne(whereStr,function(err, result) {
                 if(err)

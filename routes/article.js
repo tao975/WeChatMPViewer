@@ -2,7 +2,7 @@ var express = require('express');
 var https = require('https');
 var articledb = require('../bin/db/articledb');
 var pmdb = require('../bin/db/pmdb');
-var spider = require('../bin/spider/spider');
+var spider = require('../bin/spider/sougouWeixinSpider');
 var router = express.Router();
 
 
@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
  *  获取文章
  */
 router.get('/searchArticles', function(req, res, next) {
+
     var key = req.query.key;  // 搜索关键字
     var pageIndex = req.query.pageIndex; // 页码
     var pageSize = req.query.pageSize; // 每页条数
