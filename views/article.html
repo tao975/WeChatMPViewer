@@ -20,7 +20,7 @@
 <!-- top -->
 <div ng-include="'top.html'"></div>
 
-<div id="container">
+<div id="container" style="padding-top: 50px;">
     <!-- 轮播图
     <div class="met-banner" style="margin-bottom: 1.5%;">
         <div class="carousel slide" id="met-banner-slide" data-ride="carousel">
@@ -117,7 +117,9 @@
                         <div class="met_img_wrap">
                             <span style="font-size:16px; font-weight: bold;">{{article.title}}</span>
                             <!--<p>{{article.subtitle}}</p> -->
-                            <p style="font-size: 12px; color:#afafaf; margin-top: 0px;">{{article.auth}}&nbsp;&nbsp;{{ article.datetime | date:'yyyy' }}年{{ article.datetime | date:'M' }}月{{ article.datetime | date:'dd'}}日</p>
+                            <p style="font-size: 12px; color:#afafaf; margin-top: 0px;">
+                                <span style="color:#4e97d9;font-weight: bold;">{{article.auth}}&nbsp;&nbsp;</span>
+                                {{ article.datetime | date:'yyyy' }}年{{ article.datetime | date:'M' }}月{{ article.datetime | date:'d'}}日&nbsp;{{ article.datetime | date:'HH:mm:ss'}}</p>
                         </div>
                     </a>
                 </div>

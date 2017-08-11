@@ -19,7 +19,7 @@ exports.saveUser = function(user,callback){
             // 连接到表 user
             var collection = db.collection('user');
             // 插入数据
-            collection.updateOne({"openid":user.openid},user,{upsert:true}, function(err, result) {
+            collection.updateOne({"usercode":user.usercode},user,{upsert:true}, function(err, result) {
                 if(err)
                 {
                     console.error('Error:'+ err);
@@ -49,9 +49,11 @@ exports.getUserByCode = function(code,callback) {
             var collection = db.collection('user');
             // 查询数据
             var whereStr = { $or: [
-                {usercode: {$regex:code}},
-                {phone:{$regex:code}},
-                {openid:{$regex:code}}
+                {usercode: code},
+                {username:code},
+                {phone:code},
+                {email:code},
+                {openid:code}
             ]};
             collection.findOne(whereStr,function(err, result) {
                 if(err)

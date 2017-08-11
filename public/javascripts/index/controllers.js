@@ -65,7 +65,6 @@ angular.module('index.controllers', [])
         if($scope.isScrollLoading || $scope.isEnd) {  // 如果正在加载或已加载到全部文章则不继续加载
             return;
         }
-        console.log("加载文章！");
         $scope.isScrollLoading = true;
         $scope.pageIndex++;
         $scope.searchArticle();
@@ -138,37 +137,6 @@ angular.module('index.controllers', [])
             },1000);
         }).error(function (data,status,config,headers,statusText) { //处理响应失败
             alert("加载错误！");
-        });
-    }
-
-    // 拖拽关注的公众号
-    $scope.dragOnApp = function(){
-        var dx,dy; // 保存div webkitTransform 坐标
-        touch.on('.pm_div', 'touchstart', function(ev) {
-            ev.preventDefault();
-            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
-            if(ev.target.tagName == "DIV") {
-                var transform = ev.target.style.webkitTransform;
-            }
-            else {
-                var transform = ev.target.parentNode.style.webkitTransform;
-            }
-            var transforms = transform.split(",");
-            dx = transforms.length > 1 ? transforms[0].substring(12,transforms[0].indexOf("px")) : 0;
-            dy = transforms.length > 1 ? transforms[1].substring(1,transforms[1].indexOf("px")) : 0;
-        });
-        touch.on('.pm_div', 'drag', function(ev) {
-            var offx = parseFloat(dx) + ev.x + "px";
-            var offy = parseFloat(dy) + ev.y + "px";
-            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
-            if(ev.target.tagName == "DIV") {
-                ev.target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
-            }
-            else {
-                ev.target.parentNode.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
-            }
-        });
-        touch.on('.pm_div', 'dragend', function(ev) {
         });
     }
 
@@ -251,6 +219,40 @@ angular.module('index.controllers', [])
     }
 
 
+    // 拖拽关注的公众号
+    /*
+    $scope.dragOnApp = function(){
+        var dx,dy; // 保存div webkitTransform 坐标
+        touch.on('.pm_div', 'touchstart', function(ev) {
+            ev.preventDefault();
+            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
+            if(ev.target.tagName == "DIV") {
+                var transform = ev.target.style.webkitTransform;
+            }
+            else {
+                var transform = ev.target.parentNode.style.webkitTransform;
+            }
+            var transforms = transform.split(",");
+            dx = transforms.length > 1 ? transforms[0].substring(12,transforms[0].indexOf("px")) : 0;
+            dy = transforms.length > 1 ? transforms[1].substring(1,transforms[1].indexOf("px")) : 0;
+        });
+        touch.on('.pm_div', 'drag', function(ev) {
+            var offx = parseFloat(dx) + ev.x + "px";
+            var offy = parseFloat(dy) + ev.y + "px";
+            // 因为选中div的子元素也会拖拽，所以要判断拖拽的元素是否是div，如果不是则指向div
+            if(ev.target.tagName == "DIV") {
+                ev.target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+            }
+            else {
+                ev.target.parentNode.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+            }
+        });
+        touch.on('.pm_div', 'dragend', function(ev) {
+        });
+    }
+     */
+
+
     // 初始化
     $scope.init = function(){
         // 加载用户关注的公众号
@@ -268,7 +270,92 @@ angular.module('index.controllers', [])
     $scope.init();
 })
 
-.controller('userCtrl', function($scope, $http,$location) {
+.controller('userCtrl', function($scope,$http,$location) {
+
+    $scope.msg;
+
+    // 登录
+    $scope.doLogin = function(){
+        $http({
+            url: getRootPath() + '/user/doLogin',
+            method: 'post',
+            params: {
+                usercode : $scope.usercode,
+                password : toMD5($scope.password)  // MD5 加密
+            }
+        }).success(function (result,status,config,headers,statusText) { //响应成功
+            if(result.state == "1") {
+                window.location.href = getRootPath() + "/article.html";
+            }
+            else {
+                $scope.msg = result.msg;
+            }
+        }).error(function (data,status,config,headers,statusText) { //处理响应失败
+            alert("系统错误！");
+        });
+
+        return false;
+    }
+
+    // 注册
+    $scope.doRegister = function(){
+
+        if($scope.msg == "用户已存在"){
+            return;
+        }
+
+        if($scope.password != $scope.confirmPass) {
+            $scope.msg = "两次密码不一致，请重新输入";
+            $scope.password = "";
+            $scope.confirmPass = "";
+            return;
+        }
+
+        $http({
+            url: getRootPath() + '/user/doRegister',
+            method: 'post',
+            params: {
+                usercode : $scope.usercode,
+                password : toMD5($scope.password)  // MD5 加密
+            }
+        }).success(function (result,status,config,headers,statusText) { //响应成功
+            if(result.state == "1") {
+                window.location.href = getRootPath() + "/article.html";
+            }
+            else {
+                $scope.msg = result.msg;
+            }
+        }).error(function (data,status,config,headers,statusText) { //处理响应失败
+            alert("系统错误！");
+        });
+
+        return false;
+    }
+
+    // 判断用户是否存在
+    $scope.isExist = function(){
+
+        if(!$scope.usercode || $scope.usercode == "") {
+            return;
+        }
+
+        $http({
+            url: getRootPath() + '/user/isExist',
+            method: 'get',
+            params: {
+                usercode : $scope.usercode
+            }
+        }).success(function (result,status,config,headers,statusText) { //响应成功
+            if(result == true) {
+                $scope.msg = "用户已存在";
+            }
+            else {
+                $scope.msg = "";
+            }
+        }).error(function (data,status,config,headers,statusText) { //处理响应失败
+            alert("系统错误！");
+        });
+    }
 
 })
 ;

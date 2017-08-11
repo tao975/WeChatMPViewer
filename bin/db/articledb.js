@@ -80,26 +80,31 @@ exports.getArticleByTitle = function(title,callback) {
 
 /**
  * 关键字搜索文章
+ * @param openids 公众号ID列表
  * @param key 搜索关键字
  * @param pageIndex 页码
  * @param pageSize 每页条数
  * @param callback
  */
-exports.getArticlesByKey = function(key,pageIndex,pageSize, callback) {
+exports.getArticlesByKey = function(openids,key,pageIndex,pageSize, callback) {
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         if(!err) {
             // 连接到表 article
             var collection = db.collection('article');
 
             // 条件语句
-            var whereStr = {}
+            var whereStr = {};
+
+            if(openids) {
+                whereStr.openid = {'$in': openids};
+            }
 
             if(key != null && key != '') {
-                whereStr = { $or: [
+                whereStr.$or = [
                     {title: {$regex:key}},
                     {openid:{$regex:key}},
                     {auth:{$regex:key}}
-                ]};
+                ];
             }
 
             if(isNaN(pageIndex)) {

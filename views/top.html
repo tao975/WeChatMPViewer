@@ -24,6 +24,8 @@
 
 </head>
 <body>
+
+<div style="position: fixed;width: 100%;z-index: 999;">
 <!--[if lte IE 8]>
 <div class="text-center padding-top-50 padding-bottom-50 bg-blue-grey-100">
     <p class="browserupgrade font-size-18">你正在使用一个<strong>过时</strong>的浏览器。请升级您的浏览器，以提高您的体验。</p>
@@ -34,7 +36,7 @@
 <div id="met_mob_nav_container">
     <ul class="ul1">
         <li class="search clearfix">
-            <span class="prev w080"><a href="article.html" title="Home">主页</a></span>
+            <span class="prev w080"><a onclick="window.location.href='article.html'" title="Home">主页</a></span>
             <div id="met_mob_nav_close">
                 <img class="hover" alt="Menu" src="/images/mobile_menu_closes.png" id="need_help_mobile">
             </div>
@@ -49,10 +51,10 @@
     <div style="text-align:center; padding-top:20px;">
         <div class="navbar-right vertical-align met-nav-login animation-slide-top">
             <div class="vertical-align-middle margin-right-10 langleft"><a
-                    href=""
+                     onclick="window.location.href='register.html'"
                     class="btn btn-squared btn-primary">注册</a></div>
             <div class="vertical-align-middle langleft"><a
-                    href=""
+                    onclick="window.location.href='login.html'"
                     class="btn btn-squared btn-primary btn-outline">登录</a></div>
         </div>
     </div>
@@ -66,7 +68,7 @@
         <div id="met_global_nav" class="lg-container" style="min-height:40px; height:auto;">
             <nav class="clearfix">
                 <div id="met_logo">
-                    <a href="article.html" title="微信公众号">
+                    <a onclick="window.location.href='article.html'" title="微信公众号">
                         <img src="/images/logo.jpg" alt="微信公众号">
                         <span style="font-weight: bold;">&nbsp;微信公众号查看</span>
                     </a>
@@ -75,12 +77,12 @@
                 <ul class="nav_ul met_masthead_cata hidden-sm hidden-xs">
 
                     <li>
-                        <a href="article.html" title="Home"><span> 主页 </span></a>
+                        <a onclick="window.location.href='article.html'" title="Home"><span> 主页 </span></a>
                     </li>
 
                     <li>
                         <a data-menutype="megamenu" data-section="metmm0"
-                           href="pm.html" title="公众号管理">
+                           onclick="window.location.href='pm.html'" title="公众号管理">
                             公众号管理
                         </a>
                     </li>
@@ -119,10 +121,10 @@
 
                         <div class="navbar-right vertical-align met-nav-login animation-slide-top">
                             <div class="vertical-align-middle margin-right-10 langleft"><a
-                                    href=""
+                                    onclick="window.location.href='register.html'"
                                     class="btn btn-squared btn-primary">注册</a></div>
                             <div class="vertical-align-middle langleft"><a
-                                    href=""
+                                    onclick="window.location.href='login.html'"
                                     class="btn btn-squared btn-primary btn-outline">登录</a></div>
                         </div>
                     </div>
@@ -139,7 +141,7 @@
 
 
 
-
+</div>
 
 
 

@@ -40,40 +40,31 @@
 
 <div class="login_index met-member">
     <div class="container">
-        <form method="post" action="">
+        <div id="msg" style="color: red;" ng-show="msg">{{msg}}</div>
+        <form method="post" ng-submit="doRegister()">
             <input type="hidden" name="gourl" value="" />
             <div class="form-group">
-                <input type="text" name="username" required class="form-control" placeholder="请输入帐号"
+                <input type="text" name="usercode" ng-model="usercode" ng-blur="isExist()" required class="form-control" placeholder="请输入 帐号 / 邮箱 / 手机号"
                        data-bv-notempty="true"
                        data-bv-notempty-message="用户帐号不可为空"
                 >
             </div>
             <div class="form-group">
-                <input type="password" name="password" required class="form-control" placeholder="请输入密码"
+                <input type="password" name="password" ng-model="password" required class="form-control" placeholder="请输入密码"
                        data-bv-notempty="true"
                        data-bv-notempty-message="密码不可为空"
                 >
             </div>
             <div class="form-group">
-                <input type="password" name="password" required class="form-control" placeholder="请再次输入密码"
+                <input type="password" name="confirmPass" ng-model="confirmPass" required class="form-control" placeholder="请再次输入密码"
                        data-bv-notempty="true"
                        data-bv-notempty-message="密码不可为空"
                 >
             </div>
-            <div class="row login_code">
-                <div class="col-xs-7">
-                    <div class="form-group">
-                        <input type="text" name="code" required="" class="form-control" placeholder="验证码" data-bv-notempty="true" data-bv-notempty-message="This is required and cannot be empty" data-bv-field="code">
-                        <small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">This is required and cannot be empty</small></div>
-                </div>
-                <div class="col-xs-5 login_code_img">
-                    <img src="https://show.metinfo.cn/muban/M1601005/364/app/system/entrance.php?m=include&amp;c=ajax_pin&amp;a=dogetpin" class="img-responsive" id="getcode" title="Changer Code" align="absmiddle">
-                </div>
-            </div>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">立即注册</button>
 
-            <a class="btn btn-lg btn-info btn-block" href="login.html">已经有帐号了？赶紧登录吧！</a>
+            <a class="btn btn-lg btn-info btn-block" onclick="window.location.href='login.html'">已经有帐号了？赶紧登录吧！</a>
 
         </form>
 
@@ -81,7 +72,7 @@
 </div>
 
 <!-- footer -->
-<div ng-include="'footer.html'" style="position: fixed; bottom: 0px; width: 100%;"></div>
+<div ng-include="'footer.html'" ></div>
 
 
 <script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>

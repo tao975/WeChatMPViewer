@@ -39,32 +39,34 @@
 </div>
 
 <div class="login_index met-member">
+    <div id="msg" style="margin-left: 20px;color: red;" ng-show="msg">{{msg}}</div>
     <div class="container">
-        <form method="post" action="">
-            <input type="hidden" name="gourl" value="" />
+        <form method="post" ng-submit="doLogin()">
             <div class="form-group">
-                <input type="text" name="username" required class="form-control" placeholder="帐号 / 邮箱 / 手机号"
+                <input type="text" name="usercode" ng-model="usercode" required class="form-control" placeholder="帐号 / 邮箱 / 手机号"
                        data-bv-notempty="true"
                        data-bv-notempty-message="用户帐号不可为空"
                 >
             </div>
             <div class="form-group">
-                <input type="password" name="password" required class="form-control" placeholder="请输入密码"
+                <input type="password" name="password" ng-model="password" required class="form-control" placeholder="请输入密码"
                        data-bv-notempty="true"
                        data-bv-notempty-message="密码不可为空"
                 >
             </div>
 
+
+
             <button class="btn btn-lg btn-primary btn-block" type="submit">立即登录</button>
 
-            <a class="btn btn-lg btn-info btn-block" href="register.html">还没有帐号？赶紧注册吧！</a>
+            <a class="btn btn-lg btn-info btn-block" onclick="window.location.href='register.html'">还没有帐号？赶紧注册吧！</a>
 
         </form>
     </div>
 </div>
 
 <!-- footer -->
-<div ng-include="'footer.html'" style="position: fixed; bottom: 0px; width: 100%;"></div>
+<div ng-include="'footer.html'" ></div>
 
 
 <script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>

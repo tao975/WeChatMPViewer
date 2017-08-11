@@ -10,7 +10,7 @@ var router = express.Router();
  * 首页
  */
 router.get('/', function(req, res, next) {
-    res.redirect("article.html");
+    res.redirect("/login.html");
 });
 
 

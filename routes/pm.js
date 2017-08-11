@@ -9,7 +9,7 @@ var router = express.Router();
  * 公众号管理页面
  */
 router.get('/', function(req, res, next) {
-    res.redirect("pm.html");
+    res.redirect("/pm.html");
 });
 
 
@@ -28,7 +28,7 @@ router.get('/searchPM', function(req, res, next) {
  */
 router.post('/followPM', function(req, res, next) {
 
-    var usercode = "tao975";
+    var usercode = req.session.user.usercode;
 
     var pm = {
         openid : req.query.openid, // 公众号
@@ -51,6 +51,18 @@ router.post('/followPM', function(req, res, next) {
                     res.send("error");
                 }
             });
+
+            // 关注公众号之后立即采集该公众号的文章
+            spider.getArticlesByOpenid(pm.openid,null,function(articles){
+
+                console.log("采集公众号["+pm.name+"]文章数：" + (articles?articles.length:0) );
+
+                if(articles && articles.length > 0) {
+                    articledb.saveArticles(articles,function(result){
+                        
+                    });
+                }
+            });
         }
         else {
             res.send("error");
@@ -65,7 +77,7 @@ router.post('/followPM', function(req, res, next) {
  */
 router.post('/cancelFollowPM', function(req, res, next) {
 
-    var usercode = "tao975";
+    var usercode = req.session.user.usercode;
     var pmOpenid = req.query.openid;
 
     // 删除用户和公众号关注关系
@@ -85,7 +97,7 @@ router.post('/cancelFollowPM', function(req, res, next) {
  *  查询用户关注的公众号
  */
 router.get('/searchUserFollowPM', function(req, res, next) {
-    var usercode = "tao975";
+    var usercode = req.session.user.usercode;
     pmdb.getPMByUsercode(usercode, function(userFollowPM){
         res.json(userFollowPM);
     })

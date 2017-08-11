@@ -10,7 +10,7 @@ var router = express.Router();
  * 首页
  */
 router.get('/', function(req, res, next) {
-    res.redirect("article.html");
+    res.redirect("/article.html");
 });
 
 /**
@@ -36,9 +36,21 @@ router.get('/searchArticles', function(req, res, next) {
 
     console.log("搜索文章：" + "key=" + key + ",pageIndex="+pageIndex+",pageSize="+pageSize);
 
-    articledb.getArticlesByKey(key,pageIndex,pageSize, function(articles){
-      res.json(articles);
+    // 只取该用户关注的公众号文章
+    var usercode = req.session.user.usercode;
+    pmdb.getPMByUsercode(usercode, function(userFollowPM){
+        if(userFollowPM) {
+            var openids = [];
+            for(var i = 0; i < userFollowPM.pms.length; i++){
+                openids.push(userFollowPM.pms[i].openid);
+            }
+            articledb.getArticlesByKey(openids,key,pageIndex,pageSize, function(articles){
+                res.json(articles);
+            })
+        }
     })
+
+
 });
 
 
