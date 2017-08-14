@@ -59,10 +59,11 @@ console.log("session:"+req.session);
  */
 router.post('/doRegister', function(req, res, next) {
 
+    var username = req.query.username;
     var usercode = req.query.usercode;
     var password = req.query.password;
     var user = new Object();
-    user.username = usercode;
+    user.username = username;
     user.usercode = usercode;
     user.password = password;
 
@@ -85,6 +86,18 @@ router.post('/doRegister', function(req, res, next) {
 
 });
 
+
+/**
+ * 退出系统
+ */
+router.get('/logout', function(req, res, next) {
+
+    req.session.user = null;
+    res.redirect("/login.html");
+
+});
+
+
 /**
  * 判断用户是否存在
  */
@@ -99,6 +112,20 @@ router.get('/isExist', function(req, res, next) {
             res.send(false);
         }
     });
+
+});
+
+/**
+ * 获取已登录用户
+ */
+router.get('/getLoginUser', function(req, res, next) {
+
+    if(req.session.user) {
+        res.send(req.session.user.usercode);
+    }
+    else {
+        res.send(null);
+    }
 
 });
 

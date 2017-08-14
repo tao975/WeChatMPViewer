@@ -100,9 +100,10 @@ exports.getPms = function(callback) {
  * @param pmOpenid 公众号openid
  * @param pmName 公众号名称
  * @param pmImg 公众号头像
+ * @param type 公众号分类
  * @param callback
  */
-exports.saveUserPM = function(usercode,pmOpenid,pmName,pmImg,callback){
+exports.saveUserPM = function(usercode,pmOpenid,pmName,pmImg,pmType,callback){
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         if(!err) {
             // 连接到表 user_pm
@@ -122,11 +123,25 @@ exports.saveUserPM = function(usercode,pmOpenid,pmName,pmImg,callback){
                             pms: []
                         }
                     }
-                    obj.pms.push({
-                        openid : pmOpenid,
-                        name : pmName,
-                        img : pmImg
-                    });
+                    // 判断是否已存在这个公众号
+                    var isExist;
+                    for(var i  = 0; i < obj.pms.length; i++) {
+                        if(pmOpenid == obj.pms[i].openid) {
+                            obj.pms[i].isFollow = true;
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if(!isExist) {
+                        obj.pms.push({
+                            openid : pmOpenid,
+                            name : pmName,
+                            img : pmImg,
+                            type : pmType,
+                            isFollow : true
+                        });
+                    }
+
                     // 更新数据
                     collection.updateOne({"user":usercode},obj,{upsert:true}, function(err, result) {
                         if(err)
@@ -188,6 +203,34 @@ exports.deleteUserPM = function(usercode,pmOpenid,callback){
     });
 }
 
+/**
+ * 取消用户关注的公众号
+ * @param usercode 用户帐号
+ * @param pmOpenid 公众号openid
+ * @param callback
+ */
+exports.unFollowUserPM = function(usercode,pmOpenid,callback){
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
+
+            var whereStr = {"user":usercode,"pms.openid":pmOpenid};
+            collection.updateOne(whereStr,{ $set: {"pms.$.isFollow" : false}}, function(err, result) {
+                if(err)
+                {
+                    console.error('Error:'+ err);
+                }
+                if(callback){
+                    callback(result);
+                }
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
 
 /**
  * 查询用户关注的公众号
@@ -216,3 +259,72 @@ exports.getPMByUsercode = function(usercode,callback) {
         }
     });
 }
+
+/**
+ * 更新公众号分类
+ * @param  usercode 用户帐号
+ * @param openid 公众号ID
+ * @param type 公众号分类
+ * @param callback
+ */
+exports.updatePMType = function(usercode,openid,type,callback) {
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
+            var whereStr = {"user":usercode,"pms.openid":openid};
+            collection.updateOne(whereStr,{ $set: {"pms.$.type" : type}}, function(err, result) {
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                if(callback){
+                    callback(result);
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
+
+/**
+ * 获取公众号分类
+ * @param  usercode 用户帐号
+ * @param callback
+ */
+exports.getPMTypes = function(usercode,callback) {
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        if(!err) {
+            // 连接到表 user_pm
+            var collection = db.collection('user_pm');
+            // 查询数据
+            var whereStr = {user:usercode};
+            collection.findOne(whereStr,function(err, result) {
+                var types = [];
+                if(err)
+                {
+                    console.log('Error:'+ err);
+                }
+                else {
+                    for(var i = 0; i < result.pms.length; i++) {
+                        if(types.indexOf(result.pms[i].type) == -1) {
+                            types.push(result.pms[i].type);
+                        }
+                    }
+                }
+                if(callback){
+                    callback(types);
+                }
+                db.close();
+            });
+        }
+        else {
+            console.error("连接失败！" + err);
+        }
+    });
+}
+
+//exports.saveUserPM("18825166192","newsbro","新闻哥","aaa","新闻");

@@ -37,6 +37,11 @@ app.use(session({
 
 // 权限限制，强制用户登录
 app.use(function (req, res, next) {
+    /*
+    req.session.user = {
+        usercode : "18825166192"
+    }
+    */
     if (req.path.indexOf("top") > -1 || req.path.indexOf("footer") > -1 || req.path.toLowerCase().indexOf("login") > -1 || req.path.toLowerCase().indexOf("register") > -1 || req.path.indexOf(".js") > -1 || req.path.indexOf(".css") > -1 ||  req.path.indexOf(".map") > -1 ||  req.path.indexOf(".png") > -1 ||  req.path.indexOf(".jpg") > -1 ||  req.path.indexOf(".ico") > -1 ||  req.path.indexOf("isExist") > -1) {
         return next();
     }

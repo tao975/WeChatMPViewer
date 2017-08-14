@@ -12986,7 +12986,7 @@ li.met_nomore a:hover,li.met_hasmore a:hover{text-decoration:none !important; }
   .met_img_wrap{position: relative;min-height:100%;margin-bottom:0;}
   .met_img_subinfo a{padding: 10px 0px;-moz-transition: initial;-o-transition: initial;-webkit-transition: initial;transition: initial;}
   .met_img_subinfo a:hover{background-color: #fff;}
-  .met_img_subinfo h3{font-size: 22px;margin: 0;}
+  .met_img_subinfo h3{font-size: 18px;margin: 0;}
   .met_img_subinfo p{font-size: 16px;margin-bottom: 0; margin-top:5px;}
   .met_img_subinfo p,.met_img_subinfo h3{opacity: 1;-moz-transform: translateY(0);-ms-transform: translateY(0);-webkit-transform: translateY(0);transform: translateY(0);color: #333;}
 }

@@ -3931,11 +3931,11 @@ var metinfo = {
     reBulidMenuDom: function () {
 
         //这一段用于搜索点击展开
-        $("#met_search_box").appendTo($(".met_search"));
         if ($(window).width() >= 1024) {
+            $("#met_search_box").appendTo($(".met_search"));
             $("#met_search_box").removeAttr("style");
         } else {
-            $("#met_search_box").insertAfter($("#met_masthead_wrap"));
+            //$("#met_search_box").insertAfter($("#met_masthead_wrap"));
             $("#met_search_box").css("width", $(window).width());
         }
 
@@ -4023,7 +4023,7 @@ var metinfo = {
             $("#met_search_box").slideUp();
           }
         }
-      
+
     })
   },
   mastheadMenu: function () {

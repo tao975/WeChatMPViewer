@@ -96,12 +96,11 @@ em {
     position: relative;
     cursor: pointer;
     float: left;
-    z-index: 999;
 }
 
 .pm_div:hover
 {
-    background-color:#3ac8f3;
+    background-color:#eae9e9;
     color: #fff;
 }
 
@@ -169,4 +168,27 @@ em {
     top: 15px;
     left: 20px;
     display: none;
+}
+
+.add_type {
+    font-size: 15px;
+    color: #767b7f;
+    font-weight: bold;
+    padding-top:10px;
+    padding-bottom:10px;
+    text-align: center;
+    border-bottom: 2px solid #f2f2f2;
+}
+
+.type_div {
+    border-bottom: 2px solid #f2f2f2;
+}
+
+.type_name {
+    font-size: 15px;
+    color: #767b7f;
+    font-weight: bold;
+    padding-top:10px;
+    padding-bottom:10px;
+    text-align: center;
 }

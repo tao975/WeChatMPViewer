@@ -12,7 +12,6 @@ var schedule = require("node-schedule");
 var moment = require("moment");
 var app = express();
 
-
 /**
  *  关键字查询公众号
  */
@@ -94,12 +93,75 @@ exports.getPMByOpenid = function(openid, callback){
 }
 
 /**
- * 爬取公众号文章
+ *  关键字查询文章
+ */
+exports.searchArticlesByKey = function(key,pageIndex,callback){
+
+    var searchUrl = "http://weixin.sogou.com/weixin?type=2&query="+encodeURI(key)+"page="+pageIndex; // 查询文章url
+
+    var options = {
+        hostname:'weixin.sogou.com',
+        port:80,
+        path:"/weixin?type=2&query="+encodeURI(key)+"&page="+pageIndex, // 查询文章url
+        method:'GET',
+        headers:{
+            'Host':'weixin.sogou.com',
+            'Referer':'weixin.sogou.com',
+            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+        }
+    }
+
+    console.log(options);
+
+    //  查询文章
+    var req = http.request(options,function(res){
+        var html=''; // 保存爬回来的页面
+        res.on('data',function(data){
+            html+=data;
+        });
+        res.on('end',function(){
+            var articles = []; // 保存爬取到的文章
+
+            if(html.indexOf("news-list") == -1){
+                console.error("爬取文章出错了！"); // 出现 302 Found 错误
+                console.info(html);
+            }
+            else {
+                // 使用cheerio解析html
+                var $ = cheerio.load(html);
+
+                $(".news-list li").each(function(i, elem) {
+                    var article = {
+                        title : ncrToStr($(this).find("h3 a").html()), // 标题
+                        pic : $(this).find("img").attr("src"), // 文章首图
+                        url : $(this).find("a").attr("href"), // 文章链接
+                        datetime : parseInt($(this).find(".s2").html().replace("<script>document.write(timeConvert('","").replace("'))</script>",""))*1000, // 发布时间
+                        //openid : pm.openid,
+                        auth : ncrToStr($(this).find(".account").html()),
+                    }
+                    articles.push(article);
+                });
+            }
+
+            if(callback) {
+                callback(articles);
+            }
+
+        });
+    }).on('error', function(e) {
+        console.error("searchArticlesByKey error: " + e.message);
+    });
+    req.end();
+}
+
+
+/**
+ * 爬取所有公众号文章
  * 因为每个公众号的历史文章的连接有失效期，会过期，所以不能直接请求公众号历史文章的连接来获取历史文章
- * 处理方式：通过搜狗微信先搜索公众号，然后访问的公众号文章的连接，再解析
+ * 处理方式：通过搜狗微信先搜索公众号，然后访问该公众号的历史文章列表，再解析文章
  * @param openid 公众号ID
  * @param day 日期，爬取指定日期的文章，yyyyMMdd
- * @param callback
+ * @param callback(articles)
  */
 exports.getArticlesByOpenid = function(openid,day,callback){
     exports.getPMByOpenid(openid,function(pm){
@@ -185,46 +247,18 @@ exports.getArticlesByOpenid = function(openid,day,callback){
     })
 }
 
-
-
-
-
-//该函数的作用：在本地存储所爬取的新闻内容资源
-function savedContent($, news_title) {
-    $('.article-content p').each(function (index, item) {
-        var x = $(this).text();
-
-        var y = x.substring(0, 2).trim();
-
-        if (y == '') {
-            x = x + '\n';
-//将新闻文本内容一段一段添加到/data文件夹下，并用新闻的标题来命名文件
-            fs.appendFile('./data/' + news_title + '.txt', x, 'utf-8', function (err) {
-                if (err) {
-                    console.log(err);
-                }
-            });
-        }
-    })
-}
-
-
-//该函数的作用：在本地存储所爬取到的图片资源
-function savedImg($,news_title) {
-    $('.article-content img').each(function (index, item) {
-        var img_title = $(this).parent().next().text().trim();  //获取图片的标题
-        if(img_title.length>35||img_title==""){
-            img_title="Null";}
-        var img_filename = img_title + '.jpg';
-
-        var img_src = 'http://www.ss.pku.edu.cn' + $(this).attr('src'); //获取图片的url
-
-//采用request模块，向服务器发起一次请求，获取图片资源
-        request.head(img_src,function(err,res,body){
-            if(err){
-                console.log(err);
-            }
-        });
-        request(img_src).pipe(fs.createWriteStream('./image/'+news_title + '---' + img_filename));     //通过流的方式，把图片写到本地/image目录下，并用新闻的标题和图片的标题作为图片的名称。
-    })
+// NCR 转 字符串
+function ncrToStr(ncrStr){
+    if(!ncrStr) return "";
+    var str = "";
+    var patt = /&#.*?;/g;
+    while(r = patt.exec(ncrStr))
+    {
+        // 获得16进制的码
+        var hexcode = "0" + r[0].replace("&#", "").replace(";","");
+        // 16进制转字符
+        var text = String.fromCharCode(parseInt(hexcode,16))
+        str += text;
+    }
+    return str;
 }

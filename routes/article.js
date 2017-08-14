@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
 /**
  *  获取文章
  */
-router.get('/searchArticles', function(req, res, next) {
+router.get('/loadArticles', function(req, res, next) {
 
-    var key = req.query.key;  // 搜索关键字
+    var type = req.query.type;
     var pageIndex = req.query.pageIndex; // 页码
     var pageSize = req.query.pageSize; // 每页条数
     if(isNaN(pageIndex)) {
@@ -34,24 +34,55 @@ router.get('/searchArticles', function(req, res, next) {
         pageSize = parseInt(pageSize);
     }
 
-    console.log("搜索文章：" + "key=" + key + ",pageIndex="+pageIndex+",pageSize="+pageSize);
-
     // 只取该用户关注的公众号文章
     var usercode = req.session.user.usercode;
     pmdb.getPMByUsercode(usercode, function(userFollowPM){
         if(userFollowPM) {
             var openids = [];
             for(var i = 0; i < userFollowPM.pms.length; i++){
-                openids.push(userFollowPM.pms[i].openid);
+                if(!type || type == "全部" || type == userFollowPM.pms[i].type) {
+                    if(userFollowPM.pms[i].isFollow) {
+                        openids.push(userFollowPM.pms[i].openid);
+                    }
+                }
             }
-            articledb.getArticlesByKey(openids,key,pageIndex,pageSize, function(articles){
+            articledb.getArticlesByKey(openids,null,pageIndex,pageSize, function(articles){
                 res.json(articles);
             })
+        }
+        else {
+            res.json([]);
         }
     })
 
 
 });
+
+/**
+ *  获取公众号分类
+ */
+router.get('/getPMTypes', function(req, res, next) {
+    var usercode = req.session.user.usercode;
+    pmdb.getPMTypes(usercode,function(types){
+        res.json(types);
+    });
+});
+
+/**
+ *  搜索文章
+ */
+router.get('/searchArticles', function(req, res, next) {
+    var key = req.query.key;
+    var pageIndex = req.query.pageIndex;
+    if(!pageIndex) {
+        pageIndex = 1;
+    }
+    spider.searchArticlesByKey(key,pageIndex,function(articles){
+        res.json(articles);
+    });
+
+});
+
 
 
 module.exports = router;

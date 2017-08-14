@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="referrer" content="never">  <!--处理图片不能外链 -->
-    <title>微信公众号</title>
+    <title>微信公众号浏览器</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -15,12 +15,11 @@
     <link rel="stylesheet" href="/stylesheets/index.css">
 
 </head>
-<body ng-app="index" ng-controller="articleCtrl">
+<body ng-app="article" ng-controller="articleCtrl">
 <base href="/" />
-<!-- top -->
-<div ng-include="'top.html'"></div>
-
-<div id="container" style="padding-top: 50px;">
+<!-- top 页面-->
+<top></top>
+<div id="container">
     <!-- 轮播图
     <div class="met-banner" style="margin-bottom: 1.5%;">
         <div class="carousel slide" id="met-banner-slide" data-ride="carousel">
@@ -99,11 +98,26 @@
         </div>
     </div>
     -->
+
+    <!-- 公众号分类导航 -->
+    <div id="type_div" ng-show="!isSearch" hidden>
+        <ul class="nav nav-tabs">
+            <li id="li_全部" class="active" style="font-size: 12px;line-height: 1.5;"  ng-click="selectType('全部')">
+                <a href="#">全部</a>
+            </li>
+            <li id="li_{{type}}" style="font-size: 12px;line-height: 1.5;" ng-repeat="type in pmTypes" ng-click="selectType(type)">
+                <a href="#">{{type}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="btn btn-squared btn-primary" style="width: 100%; cursor: pointer;margin-bottom: 20px;" onclick="window.location.href='article.html'" ng-show="isSearch" >
+        <sapn ng-if="isSearch">返回主页</sapn>
+    </div>
     <br/>
     <!-- 文章列表 -->
     <div id="met_card_list" class="lg-container met-index-product" hidden infinite-scroll="scrollLoad()" infinite-scroll-disabled="isScrollLoading" infinite-scroll-distance="1">
 
-        <div class="col-sm-6" ng-repeat="article in articles">
+        <div class="col-sm-6" ng-repeat="article in articles" style="border-bottom: 1px solid #e0dddd">
             <div class="met_multi_img animate-item animate-start">
                 <div class="met_img">
                     <a href="{{article.url}}" target="_self">
@@ -115,11 +129,12 @@
                 <div class="met_img_subinfo">
                     <a href="{{article.url}}" target="_self">
                         <div class="met_img_wrap">
-                            <span style="font-size:16px; font-weight: bold;">{{article.title}}</span>
+                            <h3>{{article.title}}</h3>
                             <!--<p>{{article.subtitle}}</p> -->
-                            <p style="font-size: 12px; color:#afafaf; margin-top: 0px;">
-                                <span style="color:#4e97d9;font-weight: bold;">{{article.auth}}&nbsp;&nbsp;</span>
-                                {{ article.datetime | date:'yyyy' }}年{{ article.datetime | date:'M' }}月{{ article.datetime | date:'d'}}日&nbsp;{{ article.datetime | date:'HH:mm:ss'}}</p>
+                            <p style="font-size: 14px; color:#afafaf; margin-top: 0px;">
+                                <span style="color:#4e97d9;font-weight: bold;">{{article.auth}}&nbsp;&nbsp;&nbsp;</span>
+                                {{ article.datetime | date:'yyyy-M-d HH:mm:ss'}}
+                            </p>
                         </div>
                     </a>
                 </div>
@@ -127,7 +142,7 @@
             </div>
         </div>
         <div class="message" ng-show="isScrollLoading">正在加载文章...</div>
-        <div class="message" ng-show="isEnd">没有新的文章了</div>
+        <div class="message" ng-show="isEnd" ng-click="showSearchDiv($event)">没有新的文章了,去关注更多的公众号吧 ></div>
     </div>
 
 
@@ -141,8 +156,8 @@
 <script src="/javascripts/util.js"></script>
 <script src="/plugin/angularjs/angular.min.js"></script>
 <script src="/plugin/ngInfiniteScroll-1.0.0/ng-infinite-scroll.min.js"></script>
-<script src="/javascripts/index/app.js"></script>
-<script src="/javascripts/index/controllers.js"></script>
-
+<script src="/javascripts/article/app.js"></script>
+<script src="/javascripts/article/controllers.js"></script>
+<script src="/javascripts/top/app.js"></script>
 </body>
 </html>

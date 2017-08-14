@@ -36,14 +36,15 @@ router.post('/followPM', function(req, res, next) {
         img : req.query.img, // 头像
         desc : req.query.desc, // 介绍
         auth : req.query.auth, // 微信认证
-        url : req.query.url // 链接
+        url : req.query.url, // 链接
+        type : req.query.type
     };
 
     // 保存公众号
     pmdb.savePM(pm, function(result){
         if(result.result.ok == 1) {
             // 保存用户和公众号关注关系
-            pmdb.saveUserPM(usercode,pm.openid,pm.name,pm.img,function(result){
+            pmdb.saveUserPM(usercode,pm.openid,pm.name,pm.img,pm.type,function(result){
                 if(result.result.ok == 1) {
                     res.send("success");
                 }
@@ -81,7 +82,7 @@ router.post('/cancelFollowPM', function(req, res, next) {
     var pmOpenid = req.query.openid;
 
     // 删除用户和公众号关注关系
-    pmdb.deleteUserPM(usercode,pmOpenid,function(result){
+    pmdb.unFollowUserPM(usercode,pmOpenid,function(result){
         if(result.result.ok == 1) {
             res.send("success");
         }
@@ -101,6 +102,18 @@ router.get('/searchUserFollowPM', function(req, res, next) {
     pmdb.getPMByUsercode(usercode, function(userFollowPM){
         res.json(userFollowPM);
     })
+});
+
+/**
+ *  更新公众号分类
+ */
+router.post('/updatePMType', function(req, res, next) {
+    var openid = req.query.openid;
+    var type = req.query.type;
+    var usercode = req.session.user.usercode;
+    pmdb.updatePMType(usercode,openid,type,function(result){
+        res.send({"state":1});
+    });
 });
 
 module.exports = router;
