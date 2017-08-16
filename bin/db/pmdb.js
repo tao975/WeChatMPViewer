@@ -309,9 +309,11 @@ exports.getPMTypes = function(usercode,callback) {
                     console.log('Error:'+ err);
                 }
                 else {
-                    for(var i = 0; i < result.pms.length; i++) {
-                        if(types.indexOf(result.pms[i].type) == -1) {
-                            types.push(result.pms[i].type);
+                    if(result) {
+                        for(var i = 0; i < result.pms.length; i++) {
+                            if(types.indexOf(result.pms[i].type) == -1) {
+                                types.push(result.pms[i].type);
+                            }
                         }
                     }
                 }

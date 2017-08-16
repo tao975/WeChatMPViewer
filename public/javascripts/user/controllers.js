@@ -99,7 +99,6 @@ angular.module('user.controllers', [])
         });
     }
 
-
 })
 
 

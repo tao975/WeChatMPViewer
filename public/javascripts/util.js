@@ -199,6 +199,8 @@ function getRootPath() {
 	return (localhostPaht + projectName);
 
 }
+
+// 获取url参数
 function getParam(name){
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);

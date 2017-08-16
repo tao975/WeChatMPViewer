@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="referrer" content="never">  <!--处理图片不能外链 -->
-    <title>微信公众号浏览器</title>
+    <title>微信公众号查看</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -16,6 +16,12 @@
     <link rel="stylesheet" type="text/css" href="/plugin/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/plugin/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/metinfo.css" />
+
+    <script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
+    <script src="/javascripts/util.js"></script>
+    <script src="/plugin/angularjs/angular.min.js"></script>
+    <script src="/javascripts/user/app.js"></script>
+    <script src="/javascripts/user/controllers.js"></script>
 
 </head>
 <body ng-app="user" ng-controller="userCtrl">
@@ -39,7 +45,7 @@
 </div>
 
 <div class="login_index met-member">
-    <div id="msg" style="margin-left: 20px;color: red;" ng-show="msg">{{msg}}</div>
+    <div id="msg" style="margin-left: 20px;color: red;" ng-show="msg" hidden>{{msg}}</div>
     <div class="container">
         <form method="post" ng-submit="doLogin()">
             <div class="form-group">
@@ -69,11 +75,6 @@
 <div ng-include="'footer.html'" ></div>
 
 
-<script src="/plugin/jquery/jquery-v1.11.3.min.js"></script>
-<script src="/javascripts/util.js"></script>
-<script src="/plugin/angularjs/angular.min.js"></script>
-<script src="/javascripts/user/app.js"></script>
-<script src="/javascripts/user/controllers.js"></script>
 
 </body>
 </html>

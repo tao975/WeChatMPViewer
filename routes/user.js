@@ -1,5 +1,6 @@
 var express = require('express');
 var userdb = require('../bin/db/userdb');
+var spider = require("../bin/spider/sougouWeixinSpider");
 var router = express.Router();
 
 /**
@@ -126,6 +127,23 @@ router.get('/getLoginUser', function(req, res, next) {
     else {
         res.send(null);
     }
+
+});
+
+/**
+ * 验证码
+ */
+router.post('/verifycode', function(req, res, next) {
+
+    console.log("发送验证码！");
+
+    var cert = req.query.cert;
+    var input = req.query.input;
+console.log(cert + "," + input);
+    spider.verifycode(cert,input);
+
+    res.redirect('/verifycode.html');
+
 
 });
 

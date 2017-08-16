@@ -8,7 +8,7 @@ angular.module('article.controllers', [])
 	$scope.articles = []; // 文章列表
     $scope.searchword = ""; // 搜索关键字
     $scope.pageIndex = 1; // 页码
-    $scope.pageSize = 5; // 每页条数
+    $scope.pageSize = 20; // 每页条数
     $scope.isScrollLoading = true; // 是否正在滚动加载文章，默认为true，因为第一次加载时如果为false会触发滚动加载函数，会重复加载
     $scope.isEnd = false; // 是否已加载到底部
     $scope.isSearch = false; // 是否搜索文章

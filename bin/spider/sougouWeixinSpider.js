@@ -4,12 +4,14 @@
  */
 
 var http = require('http');
+var https = require('https');
 var fs = require('fs');
 var cheerio = require('cheerio');
 var request = require('request');
 var express = require('express');
 var schedule = require("node-schedule");
 var moment = require("moment");
+var iconv = require("iconv-lite");
 var app = express();
 
 /**
@@ -261,4 +263,56 @@ function ncrToStr(ncrStr){
         str += text;
     }
     return str;
+}
+
+// 获取验证码Cert
+exports.getCert = function(){
+    var cert = (new Date).getTime()+Math.random();
+    console.log(cert);
+}
+
+// 发送验证码
+exports.verifycode = function(cert,input){
+
+    var params = JSON.stringify({
+        'cert' : encodeURIComponent(cert),
+        'input' : encodeURIComponent(input)
+    });
+
+    var options = {
+        hostname: 'mp.weixin.qq.com',
+        port: '443',
+        path: '/mp/verifycode',
+        method: 'post',
+        headers: {
+            //  'Cookie': 'wxtokenkey=97d7a529f26b6529a801c94d0e442cfddba17fe22e3a7e4fb57953ecf4bbe033; wxuin=530120360; pass_ticket=xYUStMdaSca5QUyQhMjTJMhJhTnjvhvsfqjNNdxmlbCfZ1jnvNCZVtos12tc7Niq; wap_sid2=CKj94/wBElxyS2tETmNFdy1RakpxVkdpZ0tWbndZTTEyUGdoWXJJNXBYTUc4d2F3R3RiRXBxZ3ptaXBsWkVoYU5JbU5IYURCeVowOUNXNmFOOTllSDlIbDdYSE1XcE1EQUFBfjC/zvrLBTgMQJRO',
+            //'Accept-Encoding': 'gzip, deflate',
+            //'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat QBCore/3.43.556.400 QQBrowser/9.0.2524.400',
+            'Accept-Language' : 'zh-CN,zh;q=0.8,en-us;q=0.6,en;q=0.5;q=0.4',
+            'Host': 'mp.weixin.qq.com',
+            'Content-Length': Buffer.byteLength(params),
+            'Origin': 'https://mp.weixin.qq.com',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept': '*/*',
+            'Referer': 'https://mp.weixin.qq.com/profile?src=3&timestamp=1502763331&ver=1&signature=yP1t*DZflm8SG2qiqdLwSza3fufRftiGeXXyuKIh49TpuZckGR7o0ouasz10vwE6eRSpF8rrAxJFO405hK6jZA=='
+        }
+    };
+    var req = https.request(options, function(res) {
+        var result = "";
+        res.on('data', function(data) {
+            result += data;
+        });
+        res.on('end', function () {
+            console.log(result);
+        });
+    }).on('error', function(e) {
+        console.error(e);
+    });
+
+    req.write(params);
+
+    req.end();
+
 }

@@ -10,18 +10,19 @@ var sougongWeixinSpide = require("../spider/sougouWeixinSpider");
 var moment = require("moment");
 
 // 启动定时任务
-function run(){
+exports.run = function(){
     //test();
     collectPMArticle();
 }
 
 // 定时采集公众号文章
 function collectPMArticle(){
+    console.log("启动采集文章定时任务");
     var hadCollectedPms = []; // 保存当天已采集过的公众号，避免重复采集
     var rule = new schedule.RecurrenceRule();
-    var j = schedule.scheduleJob('0 37 * * * *', function(){  // 每3小时执行一次
+    var j = schedule.scheduleJob('0 0 1,7,9,12,15,18,20,23 * * *', function(){  // 定时执行
         console.log("执行定时采集公众号文章任务，执行时间：" + moment().format('YYYYMMDD hh:mm:ss'));
-        var day = moment().format('YYYYMMDD');  // 当前日期
+        // var day = moment().format('YYYYMMDD');  // 当前日期
         pmdb.getPms(function(pms){
             var i = 0;
             // 每采集一个公众号需等待一段时间，再继续采集下一个公众号，避免采集频率过高
@@ -36,7 +37,7 @@ function collectPMArticle(){
 
                     console.log("采集公众号["+pmname+"]的文章...");
 
-                    sougongWeixinSpide.getArticlesByOpenid(openid,day,function(articles){
+                    sougongWeixinSpide.getArticlesByOpenid(openid,null,function(articles){
 
                         console.log("采集公众号["+pmname+"]文章数：" + (articles?articles.length:0) );
 
@@ -72,6 +73,5 @@ function test(){
     var interval = setInterval(myFunction, counter);
 }
 
-run();
 
 
