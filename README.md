@@ -100,7 +100,7 @@ __biz : &#39;MzIyMjMyMjQxOA==&#39;, // 公众号id，base64加密
 	<li>搜索文章：按关键字搜索文章，实际上调用搜狗微信的搜索接口来爬文章</li>
 </ul>
 
-<p><img alt="" height="525" src="https://static.oschina.net/uploads/space/2017/0817/171025_h7lO_2352818.gif" width="305" /></p>
+<p><img alt="" height="525" src="https://static.oschina.net/uploads/space/2017/0817/171647_IhwS_2352818.gif" width="305" /></p>
 
 <h3>&nbsp; &nbsp; 3. 管理公众号</h3>
 
