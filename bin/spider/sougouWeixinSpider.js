@@ -11,7 +11,6 @@ var request = require('request');
 var express = require('express');
 var schedule = require("node-schedule");
 var moment = require("moment");
-var iconv = require("iconv-lite");
 var app = express();
 
 /**

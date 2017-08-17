@@ -4,6 +4,8 @@ angular.module('user.controllers', [])
 .controller('userCtrl', function($scope,$http,$location) {
 
     $scope.msg;
+    $scope.usercodeMsg = "";
+    $scope.usernameMsg = "";
 
     // 登录
     $scope.doLogin = function(){

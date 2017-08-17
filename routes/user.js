@@ -28,7 +28,7 @@ router.get('/register', function(req, res, next) {
  * 用户登录
  */
 router.post('/doLogin', function(req, res, next) {
-console.log("session:"+req.session);
+
     var usercode = req.query.usercode;
     var password = req.query.password;
 
@@ -139,7 +139,6 @@ router.post('/verifycode', function(req, res, next) {
 
     var cert = req.query.cert;
     var input = req.query.input;
-console.log(cert + "," + input);
     spider.verifycode(cert,input);
 
     res.redirect('/verifycode.html');

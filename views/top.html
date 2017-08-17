@@ -40,9 +40,15 @@
         </li>
 
         <li class="met_nomore min_nav" data-index="1">
-            <span class="min_nav_a" onclick="window.location.href='pm.html'">公众号管理</span>
-            <a href="" title="分类">公众号管理<em class="jiantou">&nbsp;</em></a>
+            <span class="min_nav_a" onclick="window.location.href='pm.html'">管理公众号</span>
+            <a href="" title="分类">管理公众号<em class="jiantou">&nbsp;</em></a>
         </li>
+
+        <li class="met_nomore min_nav" data-index="1" ng-show="loginUser=='tao975'">
+            <span class="min_nav_a" onclick="window.location.href='verifycode.html'">验证码</span>
+            <a href="" title="验证码">验证码<em class="jiantou">&nbsp;</em></a>
+        </li>
+
     </ul>
 
     <div style="text-align:center; padding-top:20px;" >
@@ -82,8 +88,15 @@
 
                     <li>
                         <a data-menutype="megamenu" data-section="metmm0"
-                           onclick="window.location.href='pm.html'" title="公众号管理">
+                           onclick="window.location.href='pm.html'" title="管理公众号">
                             管理公众号
+                        </a>
+                    </li>
+
+                    <li ng-show="loginUser=='tao975'">
+                        <a data-menutype="megamenu" data-section="metmm0"
+                           onclick="window.location.href='verifycode.html'" title="验证码">
+                            验证码
                         </a>
                     </li>
 

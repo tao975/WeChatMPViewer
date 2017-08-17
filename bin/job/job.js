@@ -20,7 +20,9 @@ function collectPMArticle(){
     console.log("启动采集文章定时任务");
     var hadCollectedPms = []; // 保存当天已采集过的公众号，避免重复采集
     var rule = new schedule.RecurrenceRule();
-    var j = schedule.scheduleJob('0 0 1,7,9,12,15,18,20,23 * * *', function(){  // 定时执行
+    //var jobtime = '0 0 1,7,9,12,15,18,20,23 * * *';
+    var jobtime = '0 47 * * * *';
+    var j = schedule.scheduleJob(jobtime, function(){  // 定时执行
         console.log("执行定时采集公众号文章任务，执行时间：" + moment().format('YYYYMMDD hh:mm:ss'));
         // var day = moment().format('YYYYMMDD');  // 当前日期
         pmdb.getPms(function(pms){
